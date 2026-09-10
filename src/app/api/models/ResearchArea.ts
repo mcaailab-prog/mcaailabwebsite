@@ -34,7 +34,7 @@ researchAreaSchema.virtual('id').get(function (this: IResearchArea) {
 
 researchAreaSchema.set('toJSON', {
   virtuals: true,
-  transform: (_doc: IResearchArea, ret: Record<string, unknown>) => {
+  transform: (_doc: IResearchArea, ret: any) => {
     delete ret._id;
     delete ret.__v;
     return ret;

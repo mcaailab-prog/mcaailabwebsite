@@ -71,7 +71,7 @@ collaborationSchema.virtual('id').get(function (this: ICollaboration) {
 
 collaborationSchema.set('toJSON', {
   virtuals: true,
-  transform: (_doc: ICollaboration, ret: Record<string, unknown>) => {
+  transform: (_doc: ICollaboration, ret: any) => {
     delete ret._id;
     delete ret.__v;
     return ret;

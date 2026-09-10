@@ -36,7 +36,7 @@ careerTrackSchema.virtual('id').get(function (this: ICareerTrack) {
 
 careerTrackSchema.set('toJSON', {
   virtuals: true,
-  transform: (_doc: ICareerTrack, ret: Record<string, unknown>) => {
+  transform: (_doc: ICareerTrack, ret: any) => {
     delete ret._id;
     delete ret.__v;
     return ret;

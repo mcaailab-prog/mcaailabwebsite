@@ -44,7 +44,7 @@ export default async function PartnerPage({ params }: { params: { id: string } }
       </div>
 
       <div className="prose">
-        <div dangerouslySetInnerHTML={{ __html: partner.description }} />
+        <div dangerouslySetInnerHTML={{ __html: partner.description ?? '' }} />
       </div>
 
       <p className="mt-8"><Link href="/partners" className="text-primary hover:underline">Back to partners</Link></p>

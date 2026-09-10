@@ -82,7 +82,7 @@ projectSchema.virtual('id').get(function (this: IProject) {
 
 projectSchema.set('toJSON', {
   virtuals: true,
-  transform: (_doc: IProject, ret: Record<string, unknown>) => {
+  transform: (_doc: IProject, ret: any) => {
     delete ret._id;
     delete ret.__v;
     return ret;

@@ -64,7 +64,7 @@ innovationSchema.virtual('id').get(function (this: IInnovation) {
 
 innovationSchema.set('toJSON', {
   virtuals: true,
-  transform: (_doc: IInnovation, ret: Record<string, unknown>) => {
+  transform: (_doc: IInnovation, ret: any) => {
     delete ret._id;
     delete ret.__v;
     return ret;

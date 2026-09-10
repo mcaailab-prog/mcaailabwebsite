@@ -38,7 +38,7 @@ careerApplicationSchema.virtual('id').get(function (this: ICareerApplication) {
 
 careerApplicationSchema.set('toJSON', {
   virtuals: true,
-  transform: (_doc: ICareerApplication, ret: Record<string, unknown>) => {
+  transform: (_doc: ICareerApplication, ret: any) => {
     delete ret._id;
     delete ret.__v;
     return ret;
