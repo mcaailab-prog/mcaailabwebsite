@@ -12,6 +12,18 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# Some pages query the DB at build time via generateStaticParams, so a
+# genuinely reachable (if disposable) MongoDB is needed during the build -
+# not used at runtime, the real MONGODB_URI is supplied via docker-compose's
+# env_file instead.
+ARG MONGODB_URI
+ARG ADMIN_SESSION_SECRET
+ARG ADMIN_USERS
+ENV MONGODB_URI=${MONGODB_URI}
+ENV ADMIN_SESSION_SECRET=${ADMIN_SESSION_SECRET}
+ENV ADMIN_USERS=${ADMIN_USERS}
+
 RUN npm run build
 
 # ---- runner: minimal production image ----

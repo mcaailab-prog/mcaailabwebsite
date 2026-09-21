@@ -10,6 +10,11 @@ on:
 jobs:
   build-and-lint:
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,11 +34,11 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # Dummy values so the build can complete without real secrets.
-          # No page in this app queries the DB at build time via generateStaticParams
-          # against a live connection; if that changes, real build-time secrets
-          # would need to be added here.
-          MONGODB_URI: mongodb://localhost:27017/build-placeholder
+          # Some pages (e.g. /quarterly-reports/[slug]) query the DB at build
+          # time via generateStaticParams, so this needs a genuinely reachable
+          # MongoDB, not just a placeholder string - the "mongodb" service
+          # above provides that for the duration of this job only.
+          MONGODB_URI: mongodb://localhost:27017/build
           ADMIN_SESSION_SECRET: build-placeholder
           ADMIN_USERS: '[]'
           CLOUDINARY_CLOUD_NAME: build-placeholder
