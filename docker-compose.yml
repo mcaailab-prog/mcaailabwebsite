@@ -1,0 +1,35 @@
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mcaai-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+    # Not published externally - only reachable by the app service
+    # via the internal docker network (service name "mongo").
+    networks:
+      - mcaai-net
+
+  app:
+    image: ghcr.io/mcaailab-prog/mcaailabwebsite:latest
+    container_name: mcaai-app
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+    ports:
+      # Bound to localhost only - Apache reverse-proxies to this port.
+      - "127.0.0.1:3000:3000"
+    networks:
+      - mcaai-net
+
+networks:
+  mcaai-net:
+    driver: bridge
+
+volumes:
+  mongo-data:
