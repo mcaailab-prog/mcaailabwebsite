@@ -46,13 +46,13 @@ export default function ThreePillars() {
             Our Three Pillars
           </h2>
           <p className="font-body-md text-body-md text-on-surface-variant">
-            The foundation of MCAAI's mission to bridge the gap between
+            The foundation of MCAAI&apos;s mission to bridge the gap between
             advanced technology and African community needs.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-          {pillars.map(({ title, description, Icon, border, iconBg, iconColor, textColor, items }) => (
+          {pillars.map(({ title, description, Icon, border, iconColor, textColor, items }) => (
             <div
               key={title}
               className={`bg-slate-50 rounded-2xl border-t-[3px] ${border} p-8 shadow-sm`}
