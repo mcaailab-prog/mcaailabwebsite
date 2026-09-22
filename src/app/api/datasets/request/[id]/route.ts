@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { DatasetAccessRequest } from '@/app/api/models/DatasetAccessRequest';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Check database connection
@@ -16,7 +17,6 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
   try {
     const params = await context.params;
-    const DatasetAccessRequest = require('@/app/api/models/DatasetAccessRequest').DatasetAccessRequest;
     const request = await DatasetAccessRequest.findById(params?.id).populate('dataset');
 
     if (!request) {
@@ -24,8 +24,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(request)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -46,7 +47,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
   try {
     const body = await request.json();
     const params = await context.params;
-    const DatasetAccessRequest = require('@/app/api/models/DatasetAccessRequest').DatasetAccessRequest;
     const requestObj = await DatasetAccessRequest.findByIdAndUpdate(params?.id, body, { new: true, runValidators: true }).populate('dataset');
 
     if (!requestObj) {
@@ -54,8 +54,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(requestObj)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
@@ -75,7 +76,6 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
 
   try {
     const params = await context.params;
-    const DatasetAccessRequest = require('@/app/api/models/DatasetAccessRequest').DatasetAccessRequest;
     const requestObj = await DatasetAccessRequest.findByIdAndDelete(params?.id).populate('dataset');
 
     if (!requestObj) {
@@ -83,7 +83,8 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
     }
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

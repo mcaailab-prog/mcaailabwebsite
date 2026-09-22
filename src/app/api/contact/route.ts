@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
 import { ContactSubmission } from '@/app/api/models/ContactSubmission';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   // Check database connection
   const isConnected = await checkDBConnection();
   if (!isConnected) {

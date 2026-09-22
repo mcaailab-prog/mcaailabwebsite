@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { SiteStat } from '@/app/api/models/SiteStat';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Check database connection
@@ -15,7 +16,6 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
   }
 
   try {
-    const SiteStat = require('@/app/api/models/SiteStat').SiteStat;
     const params = await context.params;
     const { id } = params;
     const siteStat = await SiteStat.findById(id);
@@ -25,8 +25,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(siteStat)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -46,7 +47,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
   try {
     const body = await request.json();
-    const SiteStat = require('@/app/api/models/SiteStat').SiteStat;
     const params = await context.params;
     const { id } = params;
     const siteStat = await SiteStat.findByIdAndUpdate(id, body, { new: true, runValidators: true });
@@ -56,8 +56,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(siteStat)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
@@ -76,7 +77,6 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
   }
 
   try {
-    const SiteStat = require('@/app/api/models/SiteStat').SiteStat;
     const params = await context.params;
     const { id } = params;
     const siteStat = await SiteStat.findByIdAndDelete(id);
@@ -86,7 +86,8 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
     }
 
     return NextResponse.json({ message: 'Site stat deleted successfully' });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
 import { Award } from '@/app/api/models/Award';
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   const isConnected = await checkDBConnection();
   if (!isConnected) {
     const connectSuccess = await connectDB();

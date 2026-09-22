@@ -92,7 +92,6 @@ export const connectDB = async (): Promise<boolean> => {
               throw err;
             }
             // Small backoff before retrying
-            // eslint-disable-next-line no-await-in-loop
             await new Promise((res) => setTimeout(res, 500 * attempt));
           }
         }
