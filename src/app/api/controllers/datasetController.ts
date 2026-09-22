@@ -5,7 +5,7 @@ import { Dataset } from '@/app/api/models/Dataset';
 export const getDatasets = async (req: Request, res: Response) => {
   try {
     const { language, requires_request } = req.query;
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
 
     if (language) filter.language = language;
     if (requires_request !== undefined) filter.requires_request = requires_request === 'true';
@@ -15,8 +15,9 @@ export const getDatasets = async (req: Request, res: Response) => {
       .populate('associated_project');
 
     res.json(datasets);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -27,8 +28,9 @@ export const createDataset = async (req: Request, res: Response) => {
     await dataset.save();
     await dataset.populate('associated_project');
     res.status(201).json(dataset);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };
 
@@ -42,8 +44,9 @@ export const getDatasetById = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Dataset not found' });
         }
         res.json(dataset);
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }
 
@@ -57,8 +60,9 @@ export const updateDataset = async (req: Request, res: Response) => {
         }
         await dataset.populate('associated_project');
         res.json(dataset);
-    } catch (error: any) {
-        res.status(400).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(400).json({ error: message });
     }
 }
 
@@ -71,7 +75,8 @@ export const deleteDataset = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Dataset not found' });
         }
         res.json({ message: 'Dataset deleted successfully' });
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }

@@ -20,8 +20,9 @@ export const getContactSubmissions = async (req: Request, res: Response) => {
       .sort({ submittedAt: -1 });
 
     res.json(submissions);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -53,7 +54,8 @@ export const createContactSubmission = async (req: Request, res: Response) => {
     }
 
     res.status(201).json(submission);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };

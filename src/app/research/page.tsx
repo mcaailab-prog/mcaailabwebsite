@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { api } from '@/lib/api';
-import Image from 'next/image';
 import Link from 'next/link';
-import { MdScience, MdFolderOpen, MdDescription, MdSchool, MdArrowForward, MdMail, MdCheckCircle, MdDataset, MdFormatQuote } from 'react-icons/md';
+import { MdScience, MdDescription, MdSchool } from 'react-icons/md';
 
 export const dynamic = 'force-dynamic';
 

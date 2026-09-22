@@ -27,8 +27,8 @@ export default function SearchPage() {
       }
       const data = await response.json();
       setResults(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }

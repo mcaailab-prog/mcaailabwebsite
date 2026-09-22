@@ -34,10 +34,11 @@ researchAreaSchema.virtual('id').get(function (this: IResearchArea) {
 
 researchAreaSchema.set('toJSON', {
   virtuals: true,
-  transform: (_doc: IResearchArea, ret: any) => {
-    delete ret._id;
-    delete ret.__v;
-    return ret;
+  transform: (_doc: IResearchArea, ret) => {
+    const plain = ret as unknown as Record<string, unknown>;
+    delete plain._id;
+    delete plain.__v;
+    return plain;
   },
 });
 

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
+import type { DatasetType } from '@/lib/api';
 import DatasetRequestForm from '@/components/forms/DatasetRequestForm';
 
 export default async function DatasetRequestPage({
@@ -11,12 +12,12 @@ export default async function DatasetRequestPage({
   const params = searchParams ? await searchParams : {};
   const datasetSlug = params.dataset;
 
-  let dataset = null;
+  let dataset: DatasetType | null = null;
 
   if (datasetSlug) {
     const raw = await api.getDatasets();
-    const datasets = JSON.parse(JSON.stringify(raw));
-    dataset = datasets.find((item: any) => item.slug === datasetSlug || item.id === datasetSlug) ?? null;
+    const datasets: DatasetType[] = JSON.parse(JSON.stringify(raw));
+    dataset = datasets.find((item) => item.slug === datasetSlug || item.id === datasetSlug) ?? null;
   }
 
   if (datasetSlug && !dataset) {

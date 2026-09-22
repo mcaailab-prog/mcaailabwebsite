@@ -60,7 +60,7 @@ export default function PartnershipForm() {
         areaOfInterest: AREAS_OF_INTEREST[0],
         message: '',
       });
-    } catch (error) {
+    } catch {
       setSubmitStatus({
         type: 'error',
         message: 'Something went wrong. Please try again later or email us directly.',

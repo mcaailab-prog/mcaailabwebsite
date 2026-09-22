@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { Partner } from '@/app/api/models/Partner';
 
-export async function GET(request: NextRequest, context: any) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Check database connection
   const isConnected = await checkDBConnection();
   if (!isConnected) {
@@ -15,7 +16,6 @@ export async function GET(request: NextRequest, context: any) {
   }
 
   try {
-    const Partner = require('@/app/api/models/Partner').Partner;
     const params = await context.params;
     const partner = await Partner.findById(params?.id);
 
@@ -24,13 +24,14 @@ export async function GET(request: NextRequest, context: any) {
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(partner)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
 // Add PUT method for updating a partner
-export async function PUT(request: NextRequest, context: any) {
+export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Check database connection
   const isConnected = await checkDBConnection();
   if (!isConnected) {
@@ -45,7 +46,6 @@ export async function PUT(request: NextRequest, context: any) {
 
   try {
     const body = await request.json();
-    const Partner = require('@/app/api/models/Partner').Partner;
     const params = await context.params;
     const partner = await Partner.findByIdAndUpdate(params?.id, body, { new: true, runValidators: true });
 
@@ -55,13 +55,14 @@ export async function PUT(request: NextRequest, context: any) {
 
     await partner.populate('associated_project');
     return NextResponse.json(JSON.parse(JSON.stringify(partner)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
 // Add DELETE method for deleting a partner
-export async function DELETE(request: NextRequest, context: any) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Check database connection
   const isConnected = await checkDBConnection();
   if (!isConnected) {
@@ -75,7 +76,6 @@ export async function DELETE(request: NextRequest, context: any) {
   }
 
   try {
-    const Partner = require('@/app/api/models/Partner').Partner;
     const params = await context.params;
     const partner = await Partner.findByIdAndDelete(params?.id);
 
@@ -84,7 +84,8 @@ export async function DELETE(request: NextRequest, context: any) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

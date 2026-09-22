@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
+import { Event } from '../src/app/api/models/Event';
 
 dotenv.config();
 
@@ -9,8 +10,6 @@ async function main() {
 
   await mongoose.connect(uri);
   console.log('Connected to MongoDB');
-
-  const Event = require('../src/app/api/models/Event').Event;
 
   const slug = 'pan-african-sign-language-policy-advocacy-webinar-2026';
   const startDate = new Date('2026-09-03T11:00:00Z'); // 2:00 PM EAT == 11:00 UTC

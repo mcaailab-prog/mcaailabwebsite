@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDatasetAccessRequests, createDatasetAccessRequest } from '@/app/api/controllers/datasetAccessRequestController';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { DatasetAccessRequest } from '@/app/api/models/DatasetAccessRequest';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   // Check database connection
   const isConnected = await checkDBConnection();
   if (!isConnected) {
@@ -18,8 +18,9 @@ export async function GET(request: NextRequest) {
   try {
     const requests = await getDatasetAccessRequestsHandler();
     return NextResponse.json(requests);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -40,14 +41,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const requestObj = await createDatasetAccessRequestHandler(body);
     return NextResponse.json(requestObj, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
 // Handler functions
 async function getDatasetAccessRequestsHandler() {
-  const DatasetAccessRequest = require('@/app/api/models/DatasetAccessRequest').DatasetAccessRequest;
   const requests = await DatasetAccessRequest.find()
     .sort({ submittedAt: -1 })
     .populate('dataset');
@@ -55,8 +56,7 @@ async function getDatasetAccessRequestsHandler() {
   return JSON.parse(JSON.stringify(requests));
 }
 
-async function createDatasetAccessRequestHandler(body: any) {
-  const DatasetAccessRequest = require('@/app/api/models/DatasetAccessRequest').DatasetAccessRequest;
+async function createDatasetAccessRequestHandler(body: Record<string, unknown>) {
   const request = new DatasetAccessRequest(body);
   await request.save();
 

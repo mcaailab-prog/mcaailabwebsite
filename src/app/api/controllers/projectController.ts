@@ -5,7 +5,7 @@ import { Project } from '@/app/api/models/Project';
 export const getProjects = async (req: Request, res: Response) => {
   try {
     const { sector, status } = req.query;
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
 
     if (sector) filter.sector = sector;
     if (status) filter.status = status;
@@ -17,8 +17,9 @@ export const getProjects = async (req: Request, res: Response) => {
       .populate('partners');
 
     res.json(projects);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -31,8 +32,9 @@ export const createProject = async (req: Request, res: Response) => {
     await project.populate('team_members');
     await project.populate('partners');
     res.status(201).json(project);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };
 
@@ -48,8 +50,9 @@ export const getProjectById = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Project not found' });
         }
         res.json(project);
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }
 
@@ -65,8 +68,9 @@ export const updateProject = async (req: Request, res: Response) => {
         await project.populate('team_members');
         await project.populate('partners');
         res.json(project);
-    } catch (error: any) {
-        res.status(400).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(400).json({ error: message });
     }
 }
 
@@ -79,7 +83,8 @@ export const deleteProject = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Project not found' });
         }
         res.json({ message: 'Project deleted successfully' });
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }

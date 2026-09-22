@@ -62,10 +62,11 @@ partnerSchema.virtual('id').get(function(this: IPartner) {
 // Ensure virtual fields are serialized
 partnerSchema.set('toJSON', {
   virtuals: true,
-  transform: (doc: IPartner, ret: any) => {
-    delete ret._id;
-    delete ret.__v;
-    return ret;
+  transform: (doc: IPartner, ret) => {
+    const plain = ret as unknown as Record<string, unknown>;
+    delete plain._id;
+    delete plain.__v;
+    return plain;
   }
 });
 

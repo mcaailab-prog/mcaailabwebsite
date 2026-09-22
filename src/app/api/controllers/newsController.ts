@@ -4,13 +4,14 @@ import { News } from '@/app/api/models/News';
 export const getNews = async (req: Request, res: Response) => {
   try {
     const { tags } = req.query;
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
     if (tags) filter.tags = { $in: Array.isArray(tags) ? tags : [String(tags)] };
     filter.is_published = true;
     const docs = await News.find(filter).sort({ published_date: -1 });
     res.json(docs);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -19,8 +20,9 @@ export const createNews = async (req: Request, res: Response) => {
     const news = new News(req.body);
     await news.save();
     res.status(201).json(news);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };
 
@@ -33,8 +35,9 @@ export const getNewsById = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'News article not found' });
         }
         res.json(news);
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }
 
@@ -47,8 +50,9 @@ export const updateNews = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'News article not found' });
         }
         res.json(news);
-    } catch (error: any) {
-        res.status(400).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(400).json({ error: message });
     }
 }
 
@@ -61,7 +65,8 @@ export const deleteNews = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'News article not found' });
         }
         res.json({ message: 'News article deleted successfully' });
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }

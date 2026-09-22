@@ -13,7 +13,8 @@ export async function POST(request: NextRequest) {
     const secureUrl = await uploadImage(file);
 
     return NextResponse.json({ secure_url: secureUrl });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

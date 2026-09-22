@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { QuarterlyReport } from '@/app/api/models/QuarterlyReport';
 
 export async function GET(request: NextRequest) {
   // Check database connection
@@ -20,15 +21,16 @@ export async function GET(request: NextRequest) {
     const year = searchParams.get('year');
     const quarter = searchParams.get('quarter');
 
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
 
     if (year) filter.year = parseInt(year);
     if (quarter) filter.quarter = parseInt(quarter);
 
     const reports = await getReportsHandler(filter);
     return NextResponse.json(reports);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -49,19 +51,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const rpt = await createReportHandler(body);
     return NextResponse.json(rpt, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
-async function getReportsHandler(filter: any) {
-  const QuarterlyReport = require('@/app/api/models/QuarterlyReport').QuarterlyReport;
+async function getReportsHandler(filter: Record<string, unknown>) {
   const docs = await QuarterlyReport.find(filter).sort({ year: -1, quarter: -1 });
   return JSON.parse(JSON.stringify(docs));
 }
 
-async function createReportHandler(body: any) {
-  const QuarterlyReport = require('@/app/api/models/QuarterlyReport').QuarterlyReport;
+async function createReportHandler(body: Record<string, unknown>) {
   const rpt = new QuarterlyReport(body);
   await rpt.save();
   return JSON.parse(JSON.stringify(rpt));

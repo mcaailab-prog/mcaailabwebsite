@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { FiMic, FiVideo, FiGlobe } from 'react-icons/fi';
 import { FaArrowRight } from 'react-icons/fa';
-import { Icon } from '@/lib/icons';
 import { api } from '@/lib/api';
 import { serialize } from '@/lib/serialize';
 import {MdDescription,MdCheckCircle,MdArrowForward, MdDataset, MdFormatQuote} from 'react-icons/md';
@@ -13,22 +12,18 @@ import PartnerWithUsSection from '@/components/sections/PartnerWithUsSection';
 import DatasetRequestModalTrigger from '@/components/sections/DatasetRequestModalTrigger';
 import NewsEventsSection from '@/components/sections/NewsEventsSection';
 import TeamSnapshotSection from '@/components/sections/TeamSnapshotSection';
-import type { QuarterlyReportType } from '@/lib/api-types';
 
 export default async function Home() {
-  const [partners, posts, members, reports] = await Promise.allSettled([
+  const [partners, posts] = await Promise.allSettled([
     api.getPartners(),
     api.getPosts(),
-    api.getTeamMembers(),
-    api.getQuarterlyReports(),
   ]);
 
   // serialize() strips Buffer/Uint8Array/ObjectId fields so data is safe
   // to pass from this Server Component into any Client Component as props
   const partnersData = serialize(partners.status === 'fulfilled' ? partners.value : []);
   const postsData    = serialize(posts.status    === 'fulfilled' ? posts.value    : []);
-  const reportsData  = serialize(reports.status   === 'fulfilled' ? reports.value   : []);
-        
+
   const teamMembers = await api.getTeamMembers();
   const plainMembers = JSON.parse(JSON.stringify(teamMembers));
 
@@ -189,13 +184,13 @@ export default async function Home() {
                       ))}
                     </ul>
                     <div className="flex flex-wrap gap-4">
-                      <a
+                      <Link
                         href="/research/publications"
                         className="inline-flex items-center gap-2 bg-white text-[#003399] px-8 py-4 rounded-lg font-montserrat font-bold hover:bg-[#72C6D5] hover:text-white transition-all duration-200"
                       >
                         View All Publications
                         <MdArrowForward />
-                      </a>
+                      </Link>
                       <DatasetRequestModalTrigger />
                     </div>
                   </div>

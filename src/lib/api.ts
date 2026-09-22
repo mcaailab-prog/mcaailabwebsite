@@ -159,6 +159,10 @@ export interface PublicationType {
   venue: string;
   abstract: string;
   pdf_file: string;
+  publication_type: string;
+  category: string;
+  is_open_access: boolean;
+  url: string;
   doi: string;
   research_areas: ResearchAreaType[];
   projects: ProjectType[];
@@ -267,11 +271,25 @@ function sanitizeImageValue(value: unknown): string {
   return value.replace(/[\u0000-\u001F\u007F]/g, '').trim();
 }
 
+// A lean mongoose document: a plain object with dynamic, model-specific
+// fields plus the driver's `_id` (mongoose types this as `unknown`, since
+// its exact shape depends on the schema). Shape varies per model, so
+// fields are read defensively rather than through a fixed interface.
+type LeanDoc = Record<string, unknown> & { _id?: unknown; id?: string };
+
+function hasId(value: unknown): value is LeanDoc {
+  return !!value && typeof value === 'object' && '_id' in value;
+}
+
+function idToString(value: unknown): string | undefined {
+  if (value === null || value === undefined) return undefined;
+  return typeof value === 'string' ? value : String(value);
+}
+
 // Converts _id to id string on every document, recursively on nested arrays
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function normalize<T>(docs: any[]): T[] {
+function normalize<T>(docs: LeanDoc[]): T[] {
   return docs.map((doc) => {
-    const obj = { ...doc, id: doc._id?.toString() ?? doc.id };
+    const obj: LeanDoc = { ...doc, id: idToString(doc._id) ?? doc.id };
 
     for (const key of ['cover_image', 'logo', 'photo']) {
       if (key in obj) {
@@ -281,10 +299,11 @@ function normalize<T>(docs: any[]): T[] {
 
     // Normalize any nested populated arrays
     for (const key of Object.keys(obj)) {
-      if (Array.isArray(obj[key]) && obj[key][0]?._id) {
-        obj[key] = normalize(obj[key]);
-      } else if (obj[key]?._id) {
-        obj[key] = { ...obj[key], id: obj[key]._id.toString() };
+      const value = obj[key];
+      if (Array.isArray(value) && hasId(value[0])) {
+        obj[key] = normalize(value as LeanDoc[]);
+      } else if (hasId(value)) {
+        obj[key] = { ...value, id: idToString(value._id) };
       }
     }
     return obj as T;
@@ -352,7 +371,7 @@ export const api = {
     await db();
     const doc = await Project.findOne({ slug, is_published: true }).lean();
     if (!doc) return null;
-    return normalize<ProjectType>([doc])[0];
+    return normalize<ProjectType>([doc as LeanDoc])[0];
   },
 
   async getCollaborations(): Promise<CollaborationType[]> {
@@ -365,7 +384,7 @@ export const api = {
     await db();
     const doc = await Collaboration.findOne({ slug, is_published: true }).lean();
     if (!doc) return null;
-    return normalize<CollaborationType>([doc])[0];
+    return normalize<CollaborationType>([doc as LeanDoc])[0];
   },
 
   async getInnovations(): Promise<InnovationType[]> {
@@ -378,7 +397,7 @@ export const api = {
     await db();
     const doc = await Innovation.findOne({ slug, is_published: true }).lean();
     if (!doc) return null;
-    return normalize<InnovationType>([doc])[0];
+    return normalize<InnovationType>([doc as LeanDoc])[0];
   },
 
   async getCareerTracks(): Promise<CareerTrackType[]> {
@@ -391,7 +410,7 @@ export const api = {
     await db();
     const doc = await CareerTrack.findOne({ slug }).lean();
     if (!doc) return null;
-    return normalize<CareerTrackType>([doc])[0];
+    return normalize<CareerTrackType>([doc as LeanDoc])[0];
   },
 
   async getPublications(filters?: { year?: number; search?: string }): Promise<PublicationType[]> {
@@ -431,7 +450,7 @@ export const api = {
           category: 'news',
           cover_image: n.cover_image ?? '',
           body: n.body ?? n.summary ?? '',
-          author: (n as any).author ?? '',
+          author: n.author ?? '',
           published_date: n.published_date ? n.published_date.toISOString() : '',
           is_published: !!n.is_published,
           created_at: n.createdAt?.toISOString?.() ?? '',

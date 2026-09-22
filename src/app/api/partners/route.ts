@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { Partner } from '@/app/api/models/Partner';
 
 export async function GET(request: NextRequest) {
   // Check database connection
@@ -19,15 +20,15 @@ export async function GET(request: NextRequest) {
     const searchParams = url.searchParams;
     const partner_type = searchParams.get('partner_type');
 
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
     if (partner_type) filter.partner_type = partner_type;
 
-    const Partner = require('@/app/api/models/Partner').Partner;
     const partners = await Partner.find(filter)
       .sort({ order: 1, name: 1 });
     return NextResponse.json(JSON.parse(JSON.stringify(partners)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -46,12 +47,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const Partner = require('@/app/api/models/Partner').Partner;
     const partner = new Partner(body);
     await partner.save();
     await partner.populate('associated_project');
     return NextResponse.json(JSON.parse(JSON.stringify(partner)), { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }

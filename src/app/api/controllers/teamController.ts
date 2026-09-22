@@ -8,8 +8,9 @@ export const getTeamMembers = async (req: Request, res: Response) => {
       .sort({ order: 1, name: 1 });
 
     res.json(teamMembers);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -19,8 +20,9 @@ export const createTeamMember = async (req: Request, res: Response) => {
     const teamMember = new TeamMember(req.body);
     await teamMember.save();
     res.status(201).json(teamMember);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };
 
@@ -33,8 +35,9 @@ export const getTeamMemberById = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Team member not found' });
         }
         res.json(teamMember);
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }
 
@@ -47,8 +50,9 @@ export const updateTeamMember = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Team member not found' });
         }
         res.json(teamMember);
-    } catch (error: any) {
-        res.status(400).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(400).json({ error: message });
     }
 }
 
@@ -61,7 +65,8 @@ export const deleteTeamMember = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Team member not found' });
         }
         res.json({ message: 'Team member deleted successfully' });
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }

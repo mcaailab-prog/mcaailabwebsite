@@ -5,7 +5,7 @@ import { Partner } from '@/app/api/models/Partner';
 export const getPartners = async (req: Request, res: Response) => {
   try {
     const { partner_type } = req.query;
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
 
     if (partner_type) filter.partner_type = partner_type;
 
@@ -13,8 +13,9 @@ export const getPartners = async (req: Request, res: Response) => {
       .sort({ order: 1, name: 1 });
 
     res.json(partners);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -24,7 +25,8 @@ export const createPartner = async (req: Request, res: Response) => {
     const partner = new Partner(req.body);
     await partner.save();
     res.status(201).json(partner);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };

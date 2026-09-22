@@ -27,34 +27,34 @@ function useTypewriter(
 ) {
   const { typingSpeedMs = 120, deletingSpeedMs = 70, pauseMs = 1800 } = options
   const [displayedText, setDisplayedText] = useState('')
-  const [phase, setPhase] = useState<'typing' | 'pausing' | 'deleting'>('typing')
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
-    if (phase === 'typing') {
-      if (displayedText.length < word.length) {
-        const timeout = setTimeout(() => {
-          setDisplayedText(word.slice(0, displayedText.length + 1))
-        }, typingSpeedMs)
-        return () => clearTimeout(timeout)
-      }
-      setPhase('pausing')
-      return
-    }
-
-    if (phase === 'pausing') {
-      const timeout = setTimeout(() => setPhase('deleting'), pauseMs)
-      return () => clearTimeout(timeout)
-    }
-
-    // phase === 'deleting'
-    if (displayedText.length > 0) {
+    if (isDeleting) {
       const timeout = setTimeout(() => {
-        setDisplayedText(word.slice(0, displayedText.length - 1))
+        // Delete the last character; when that empties the word, flip back
+        // to typing in the same tick instead of a separate render pass.
+        if (displayedText.length <= 1) {
+          setDisplayedText('')
+          setIsDeleting(false)
+        } else {
+          setDisplayedText(word.slice(0, displayedText.length - 1))
+        }
       }, deletingSpeedMs)
       return () => clearTimeout(timeout)
     }
-    setPhase('typing')
-  }, [displayedText, phase, word, typingSpeedMs, deletingSpeedMs, pauseMs])
+
+    if (displayedText.length < word.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(word.slice(0, displayedText.length + 1))
+      }, typingSpeedMs)
+      return () => clearTimeout(timeout)
+    }
+
+    // Finished typing the full word: pause, then start deleting.
+    const timeout = setTimeout(() => setIsDeleting(true), pauseMs)
+    return () => clearTimeout(timeout)
+  }, [displayedText, isDeleting, word, typingSpeedMs, deletingSpeedMs, pauseMs])
 
   return displayedText
 }

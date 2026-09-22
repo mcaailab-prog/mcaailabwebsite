@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { FaNewspaper, FaCalendarAlt, FaTrophy, FaArrowRight } from 'react-icons/fa';
 import type { PostType } from '@/lib/api-types';
-import RichTextRenderer from '@/components/ui/RichTextRenderer';
 
 export default function NewsEventsSection({ posts = [] }: { posts?: PostType[] }) {
   if (!posts.length) return null;
