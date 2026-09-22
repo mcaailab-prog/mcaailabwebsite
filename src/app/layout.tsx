@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   description: "Harnessing AI for community-driven innovations. Positioning Maseno University at the forefront of AI research in Africa.",
 };
 
+// Content pages read directly from MongoDB (not via fetch()), and the
+// production build's database is only an empty, disposable CI service
+// container - so static prerendering bakes every content page in as
+// permanently empty. Force every route to render per-request instead so
+// pages always reflect the real database, not the build-time snapshot.
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: {
