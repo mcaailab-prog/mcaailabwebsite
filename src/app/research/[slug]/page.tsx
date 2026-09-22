@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import RichTextRenderer from '@/components/ui/RichTextRenderer';
-import type { PublicationType, ProjectType, ResearchAreaType, TeamMemberType } from '@/lib/api-types';
+import type { ResearchAreaType, TeamMemberType } from '@/lib/api-types';
 
 const slugify = (s: string) =>
   s
