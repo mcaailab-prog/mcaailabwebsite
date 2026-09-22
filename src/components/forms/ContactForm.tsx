@@ -55,7 +55,7 @@ export default function ContactForm({
         subject: '',
         message: '',
       });
-    } catch (_) {
+    } catch {
       setSubmitStatus({
         type: 'error',
         message: 'Failed to send message. Please try again later.',
