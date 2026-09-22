@@ -5,7 +5,7 @@ import { ResearchArea } from '@/app/api/models/ResearchArea';
 export const getResearchAreas = async (req: Request, res: Response) => {
   try {
     const { category, status } = req.query;
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
 
     if (category) filter.category = category;
     if (status) filter.status = status;
@@ -14,8 +14,9 @@ export const getResearchAreas = async (req: Request, res: Response) => {
       .sort({ order: 1, title: 1 });
 
     res.json(researchAreas);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -25,7 +26,8 @@ export const createResearchArea = async (req: Request, res: Response) => {
     const researchArea = new ResearchArea(req.body);
     await researchArea.save();
     res.status(201).json(researchArea);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };
