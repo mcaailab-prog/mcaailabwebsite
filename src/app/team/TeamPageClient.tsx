@@ -17,15 +17,30 @@ const ALLOWED_ATTRS: Record<string, Set<string>> = {
   '*': new Set(['class']),
 };
 
+// The Sanitizer API (Chrome 116+, Firefox 135+) is still experimental and
+// isn't part of the standard DOM lib types yet, so its surface is declared
+// narrowly here rather than reaching for `any`.
+interface ExperimentalSanitizerCtor {
+  new (options: {
+    allowElements: string[];
+    allowAttributes: Record<string, string[]>;
+  }): unknown;
+}
+
+interface ElementWithSetHTML extends Element {
+  setHTML(input: string, options: { sanitizer: unknown }): void;
+}
+
 function sanitizeHTML(raw: string): string {
   // Native Sanitizer API (Chrome 116+, Firefox 135+)
   if (typeof window !== 'undefined' && 'Sanitizer' in window) {
-    const sanitizer = new (window as any).Sanitizer({
+    const SanitizerCtor = (window as unknown as { Sanitizer: ExperimentalSanitizerCtor }).Sanitizer;
+    const sanitizer = new SanitizerCtor({
       allowElements: [...ALLOWED_TAGS],
       allowAttributes: { href: ['a'], target: ['a'], rel: ['a'], class: ['*'] },
     });
     const el = document.createElement('div');
-    (el as any).setHTML(raw, { sanitizer });
+    (el as unknown as ElementWithSetHTML).setHTML(raw, { sanitizer });
     return el.innerHTML;
   }
 

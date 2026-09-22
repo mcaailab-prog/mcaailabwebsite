@@ -39,10 +39,11 @@ siteStatSchema.virtual('id').get(function(this: ISiteStat) {
 // Ensure virtual fields are serialized
 siteStatSchema.set('toJSON', {
   virtuals: true,
-  transform: (doc: ISiteStat, ret: any) => {
-    delete ret._id;
-    delete ret.__v;
-    return ret;
+  transform: (doc: ISiteStat, ret) => {
+    const plain = ret as unknown as Record<string, unknown>;
+    delete plain._id;
+    delete plain.__v;
+    return plain;
   }
 });
 

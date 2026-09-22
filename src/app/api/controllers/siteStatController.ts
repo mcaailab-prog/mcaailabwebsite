@@ -8,8 +8,9 @@ export const getSiteStats = async (req: Request, res: Response) => {
       .sort({ order: 1, label: 1 });
 
     res.json(siteStats);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -19,7 +20,8 @@ export const createSiteStat = async (req: Request, res: Response) => {
     const siteStat = new SiteStat(req.body);
     await siteStat.save();
     res.status(201).json(siteStat);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };

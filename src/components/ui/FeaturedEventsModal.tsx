@@ -1,31 +1,35 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FiX, FiExternalLink } from 'react-icons/fi';
 import type { EventType } from '@/lib/api-types';
 
 export default function FeaturedEventsModal({ events }: { events: EventType[] }) {
-  const [isOpen, setIsOpen] = useState(false);
-
   const selectedEvent = useMemo(() => {
     if (!events?.length) return null;
     return events[0] ?? null;
   }, [events]);
 
-  useEffect(() => {
-    if (!selectedEvent) return;
+  // `events` is only ever passed in already-resolved (the parent withholds
+  // rendering this component until its fetch completes), so the dismissed
+  // flag can be read once, synchronously, as the initial state instead of
+  // via an effect that would open the modal a render late.
+  const [isOpen, setIsOpen] = useState(() => {
+    if (!selectedEvent) return false;
     try {
-      const dismissed = typeof window !== 'undefined' && sessionStorage.getItem('featuredEventModalDismissed') === 'true';
-      if (!dismissed) setIsOpen(true);
-    } catch (e) {
-      setIsOpen(true);
+      const dismissed =
+        typeof window !== 'undefined' &&
+        sessionStorage.getItem('featuredEventModalDismissed') === 'true';
+      return !dismissed;
+    } catch {
+      return true;
     }
-  }, [selectedEvent]);
+  });
 
   const handleClose = () => {
     try {
       if (typeof window !== 'undefined') sessionStorage.setItem('featuredEventModalDismissed', 'true');
-    } catch (e) {
+    } catch {
       // ignore
     }
     setIsOpen(false);
@@ -33,8 +37,6 @@ export default function FeaturedEventsModal({ events }: { events: EventType[] })
 
   if (!isOpen || !selectedEvent) return null;
 
-  const bodyText = selectedEvent.body?.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() ?? '';
-  const excerpt = bodyText.length > 180 ? `${bodyText.slice(0, 180).trim()}…` : bodyText;
   const eventDate = selectedEvent.start_date ? new Date(selectedEvent.start_date) : selectedEvent.published_date ? new Date(selectedEvent.published_date) : null;
   const formattedDate = eventDate
     ? eventDate.toLocaleDateString('en-US', {

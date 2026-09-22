@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTeamMembers, createTeamMember } from '@/app/api/controllers/teamController';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { TeamMember } from '@/app/api/models/TeamMember';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   // Check database connection
   const isConnected = await checkDBConnection();
   if (!isConnected) {
@@ -18,8 +18,9 @@ export async function GET(request: NextRequest) {
   try {
     const teamMembers = await getTeamMembersHandler();
     return NextResponse.json(teamMembers);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -40,22 +41,21 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const teamMember = await createTeamMemberHandler(body);
     return NextResponse.json(teamMember, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
 // Handler functions
 async function getTeamMembersHandler() {
-  const TeamMember = require('@/app/api/models/TeamMember').TeamMember;
   const teamMembers = await TeamMember.find()
     .sort({ order: 1, name: 1 });
 
   return JSON.parse(JSON.stringify(teamMembers));
 }
 
-async function createTeamMemberHandler(body: any) {
-  const TeamMember = require('@/app/api/models/TeamMember').TeamMember;
+async function createTeamMemberHandler(body: Record<string, unknown>) {
   const teamMember = new TeamMember(body);
   await teamMember.save();
   return JSON.parse(JSON.stringify(teamMember));

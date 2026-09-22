@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { QuarterlyReport } from '@/app/api/models/QuarterlyReport';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Check database connection
@@ -17,7 +18,6 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
   try {
     const params = await context.params;
     const { id } = params;
-    const QuarterlyReport = require('@/app/api/models/QuarterlyReport').QuarterlyReport;
     const report = await QuarterlyReport.findById(id);
 
     if (!report) {
@@ -25,8 +25,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(report)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -48,7 +49,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const params = await context.params;
     const { id } = params;
     const body = await request.json();
-    const QuarterlyReport = require('@/app/api/models/QuarterlyReport').QuarterlyReport;
     const report = await QuarterlyReport.findByIdAndUpdate(id, body, { new: true, runValidators: true });
 
     if (!report) {
@@ -56,8 +56,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(report)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
@@ -78,7 +79,6 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
   try {
     const params = await context.params;
     const { id } = params;
-    const QuarterlyReport = require('@/app/api/models/QuarterlyReport').QuarterlyReport;
     const report = await QuarterlyReport.findByIdAndDelete(id);
 
     if (!report) {
@@ -86,7 +86,8 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
     }
 
     return NextResponse.json({ message: 'Report deleted successfully' });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

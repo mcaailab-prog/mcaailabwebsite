@@ -46,13 +46,11 @@ const navigationItems: NavItem[] = [
 const NavItem = ({
   item,
   openDropdown,
-  setOpenDropdown,
   handleNavClick,
   isHeaderDark,
 }: {
   item: NavItem;
   openDropdown: string | null;
-  setOpenDropdown: React.Dispatch<React.SetStateAction<string | null>>;
   handleNavClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
   isHeaderDark: boolean;
 }) => {
@@ -128,7 +126,6 @@ export default function Header() {
   const lastScrollY = useRef(0);
 
   const isApplyModalOpen = modalType !== null;
-  const isHeaderDark = true;
 
   // Only called for actual navigation (no submenus), so safe to close drawer
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, href: string) => {
@@ -228,7 +225,6 @@ export default function Header() {
                     key={item.label}
                     item={item}
                     openDropdown={openDropdown}
-                    setOpenDropdown={setOpenDropdown}
                     handleNavClick={handleNavClick}
                     isHeaderDark={isScrolledPastHero}
                   />

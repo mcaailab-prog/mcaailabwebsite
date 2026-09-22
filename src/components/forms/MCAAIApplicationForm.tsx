@@ -80,7 +80,7 @@ export default function MCAAIApplicationForm() {
       });
       setFormData(initialFormValues);
       setStep(1);
-    } catch (error) {
+    } catch {
       setSubmitStatus({
         type: 'error',
         message: 'Unable to submit your application right now. Please try again later.',

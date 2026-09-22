@@ -2,7 +2,7 @@ import PublicationsClient from './PublicationsClient';
 import { api } from '@/lib/api';
 import type { PublicationType } from '@/lib/api';
 
-function serializePublications(data: any[]): PublicationType[] {
+function serializePublications(data: PublicationType[]): PublicationType[] {
   return JSON.parse(JSON.stringify(data));
 }
 

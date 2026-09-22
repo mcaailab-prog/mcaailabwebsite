@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { Project } from '@/app/api/models/Project';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Check database connection
@@ -15,7 +16,6 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
   }
 
   try {
-    const Project = require('@/app/api/models/Project').Project;
     const params = await context.params;
     const { id } = params;
     const project = await Project.findById(id)
@@ -28,8 +28,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(project)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -48,7 +49,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
   try {
     const body = await request.json();
-    const Project = require('@/app/api/models/Project').Project;
     const params = await context.params;
     const { id } = params;
     const project = await Project.findByIdAndUpdate(id, body, { new: true });
@@ -62,8 +62,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     await project.populate('partners');
 
     return NextResponse.json(JSON.parse(JSON.stringify(project)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
@@ -81,7 +82,6 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
   }
 
   try {
-    const Project = require('@/app/api/models/Project').Project;
     const params = await context.params;
     const { id } = params;
     const project = await Project.findByIdAndDelete(id);
@@ -91,7 +91,8 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
     }
 
     return NextResponse.json({ message: 'Project deleted successfully' });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { api } from '@/lib/api';
+import type { DatasetType } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import {
   FiLock, FiUnlock, FiArrowLeft,
@@ -9,15 +10,6 @@ import {
 import RichTextRenderer from '@/components/ui/RichTextRenderer';
 import DatasetRequestAction from '@/components/datasets/DatasetRequestAction';
 
-function stripHtml(value: string | null | undefined): string {
-  if (!value) return '';
-
-  return value
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -25,8 +17,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const raw = await api.getDatasets();
-  const datasets = JSON.parse(JSON.stringify(raw));
-  const dataset = datasets.find((d: any) => d.slug === slug);
+  const datasets: DatasetType[] = JSON.parse(JSON.stringify(raw));
+  const dataset = datasets.find((d) => d.slug === slug);
 
   if (!dataset) {
     return {
@@ -49,8 +41,8 @@ export default async function DatasetDetailPage({
   const { slug } = await params;
 
   const raw = await api.getDatasets();
-  const datasets = JSON.parse(JSON.stringify(raw));
-  const dataset = datasets.find((d: any) => d.slug === slug);
+  const datasets: DatasetType[] = JSON.parse(JSON.stringify(raw));
+  const dataset = datasets.find((d) => d.slug === slug);
 
   if (!dataset) notFound();
 
@@ -168,9 +160,9 @@ export default async function DatasetDetailPage({
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {datasets
-            .filter((d: any) => d.slug !== dataset.slug)
+            .filter((d) => d.slug !== dataset.slug)
             .slice(0, 3)
-            .map((related: any) => (
+            .map((related) => (
               <article
                 key={related.id}
                 className="group rounded-2xl border border-outline-variant/70 bg-surface-container-lowest p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary"

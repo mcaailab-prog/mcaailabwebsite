@@ -110,10 +110,11 @@ publicationSchema.virtual('id').get(function(this: IPublication) {
 // Ensure virtual fields are serialized
 publicationSchema.set('toJSON', {
   virtuals: true,
-  transform: (doc: any, ret: any) => {
-    delete ret._id;
-    delete ret.__v;
-    return ret;
+  transform: (doc, ret) => {
+    const plain = ret as unknown as Record<string, unknown>;
+    delete plain._id;
+    delete plain.__v;
+    return plain;
   }
 });
 

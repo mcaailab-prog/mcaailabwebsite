@@ -80,10 +80,11 @@ teamMemberSchema.virtual('id').get(function(this: ITeamMember) {
 // Ensure virtual fields are serialized
 teamMemberSchema.set('toJSON', {
   virtuals: true,
-  transform: (doc: ITeamMember, ret: any) => {
-    delete ret._id;
-    delete ret.__v;
-    return ret;
+  transform: (doc: ITeamMember, ret) => {
+    const plain = ret as unknown as Record<string, unknown>;
+    delete plain._id;
+    delete plain.__v;
+    return plain;
   }
 });
 

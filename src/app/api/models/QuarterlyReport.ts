@@ -33,7 +33,7 @@ const quarterlyReportSchema = new Schema<IQuarterlyReport>({
 });
 
 quarterlyReportSchema.virtual('id').get(function(this: IQuarterlyReport) { return this._id.toHexString(); });
-quarterlyReportSchema.set('toJSON', { virtuals: true, transform: (doc: IQuarterlyReport, ret: any) => { delete ret._id; delete ret.__v; return ret; } });
+quarterlyReportSchema.set('toJSON', { virtuals: true, transform: (doc: IQuarterlyReport, ret) => { const plain = ret as unknown as Record<string, unknown>; delete plain._id; delete plain.__v; return plain; } });
 
 export const QuarterlyReport =
   (mongoose.models && mongoose.models['QuarterlyReport']) ||

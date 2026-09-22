@@ -114,10 +114,6 @@ export default function AdminEditor({
 }) {
   const router = useRouter();
   const isNew = !id || id === 'new';
-  const [data, setData] = useState<Record<string, unknown>>({});
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [loading, setLoading] = useState(!isNew);
 
   const defaults = useMemo(() => {
     const initial: Record<string, unknown> = {};
@@ -128,11 +124,16 @@ export default function AdminEditor({
     return initial;
   }, [resource.fields]);
 
+  // A new record starts from the field defaults immediately — there's no
+  // fetch involved, so it's computed as the initial state rather than set
+  // from an effect (which would flash an empty form for one render first).
+  const [data, setData] = useState<Record<string, unknown>>(() => (isNew ? defaults : {}));
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(!isNew);
+
   useEffect(() => {
-    if (isNew) {
-      setData(defaults);
-      return;
-    }
+    if (isNew) return;
     let cancelled = false;
     (async () => {
       try {
@@ -149,7 +150,7 @@ export default function AdminEditor({
     return () => {
       cancelled = true;
     };
-  }, [defaults, id, isNew, resource.api]);
+  }, [id, isNew, resource.api]);
 
   const update = (path: string, value: unknown) => {
     setData((current) => setValue(current, path, value));

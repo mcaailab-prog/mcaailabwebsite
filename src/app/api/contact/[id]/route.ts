@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 }
 
 // Add PUT method for updating contact submissions (though typically not needed for contact forms)
-export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function PUT() {
   // For contact submissions, we typically don't allow updates via API for security reasons
   // But if needed, we can implement it here with proper validation
   return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });

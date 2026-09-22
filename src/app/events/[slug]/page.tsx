@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
-import { serialize } from '@/lib/serialize';
 import type { EventType } from '@/lib/api-types';
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } = params;
-  const all = await api.getEvents({ when: 'all' as any });
+  const all = await api.getEvents({ when: 'all' });
   const event = all.find((e: EventType) => e.slug === slug);
   if (!event) return { title: 'Event not found — MCAAI' };
   return { title: `${event.title} — MCAAI`, description: event.summary ?? '' };
@@ -14,7 +13,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default async function EventDetail({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const all = await api.getEvents({ when: 'all' as any });
+  const all = await api.getEvents({ when: 'all' });
   const event = all.find((e: EventType) => e.slug === slug);
   if (!event) notFound();
 

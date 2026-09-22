@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { PublicationType } from '@/lib/api';
 import { FiSearch, FiX, FiExternalLink, FiDownload, FiMessageSquare, FiLock, FiEye } from 'react-icons/fi';
@@ -8,8 +8,8 @@ import { FiSearch, FiX, FiExternalLink, FiDownload, FiMessageSquare, FiLock, FiE
 // ─── helpers ────────────────────────────────────────────────────────────────
 
 function getCategoryTag(pub: PublicationType): string {
-  if ((pub as any).publication_type) return (pub as any).publication_type;
-  if ((pub as any).category) return (pub as any).category;
+  if (pub.publication_type) return pub.publication_type;
+  if (pub.category) return pub.category;
   const venue = (pub.venue ?? '').toLowerCase();
   if (venue.includes('journal')) return 'Journal Article';
   if (venue.includes('conference') || venue.includes('workshop')) return 'Conference Paper';
@@ -19,12 +19,12 @@ function getCategoryTag(pub: PublicationType): string {
 }
 
 function isOpenAccess(pub: PublicationType): boolean {
-  return (pub as any).is_open_access ?? (pub as any).open_access ?? true;
+  return pub.is_open_access ?? true;
 }
 
 function getReadUrl(pub: PublicationType): string | null {
   if (pub.doi) return `https://doi.org/${pub.doi}`;
-  if ((pub as any).url) return (pub as any).url;
+  if (pub.url) return pub.url;
   return null;
 }
 
@@ -36,7 +36,7 @@ function PublicationItem({ pub }: { pub: PublicationType }) {
   const tag = getCategoryTag(pub);
   const openAccess = isOpenAccess(pub);
   const readUrl = getReadUrl(pub);
-  const pdfUrl = (pub as any).pdf_file ?? null;
+  const pdfUrl = pub.pdf_file ?? null;
 
   return (
     <article className="bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-6 flex flex-col gap-4 border-t-[3px] border-t-primary transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
@@ -68,9 +68,9 @@ function PublicationItem({ pub }: { pub: PublicationType }) {
       </div>
 
       {/* abstract snippet */}
-      {(pub as any).abstract && (
+      {pub.abstract && (
         <p className="text-on-surface-variant text-[13px] line-clamp-2">
-          {(pub as any).abstract}
+          {pub.abstract}
         </p>
       )}
 
@@ -139,7 +139,7 @@ export default function PublicationsClient({
 
   const categories = useMemo(() => {
     const set = new Set(
-      allPublications.map(p => (p as any).category ?? (p as any).research_area ?? '')
+      allPublications.map(p => p.category ?? '')
         .filter(Boolean)
     );
     return Array.from(set).sort();
@@ -179,13 +179,13 @@ export default function PublicationsClient({
     const q = search.toLowerCase().trim();
     let result = allPublications.filter(pub => {
       if (activeCategory) {
-        const cat = (pub as any).category ?? (pub as any).research_area ?? '';
+        const cat = pub.category ?? '';
         if (cat !== activeCategory) return false;
       }
       if (activeYear && String(pub.year) !== activeYear) return false;
       if (activeType && getCategoryTag(pub) !== activeType) return false;
       if (q) {
-        const haystack = [pub.title, pub.authors, pub.venue, (pub as any).abstract]
+        const haystack = [pub.title, pub.authors, pub.venue, pub.abstract]
           .filter(Boolean).join(' ').toLowerCase();
         if (!haystack.includes(q)) return false;
       }
@@ -197,10 +197,15 @@ export default function PublicationsClient({
     return result;
   }, [allPublications, search, activeCategory, activeYear, activeType, sortBy]);
 
-  // Reset to page 1 whenever filters change
-  useEffect(() => {
+  // Reset to page 1 whenever a filter changes. Adjusted directly during
+  // render (React's recommended alternative to an effect for this case)
+  // rather than via a post-commit effect, so there's no stale-page flash.
+  const filterKey = `${search}|${activeCategory}|${activeYear}|${activeType}|${sortBy}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey);
     setPage(1);
-  }, [search, activeCategory, activeYear, activeType, sortBy]);
+  }
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);

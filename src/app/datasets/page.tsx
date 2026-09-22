@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { api } from '@/lib/api';
+import type { DatasetType } from '@/lib/api';
 import DatasetCardClient from '@/components/datasets/DatasetCardClient';
 import { FiLock, FiUnlock, FiDatabase, FiArrowRight } from 'react-icons/fi';
 
@@ -11,10 +12,10 @@ export const metadata: Metadata = {
 
 export default async function DatasetsPage() {
   const raw = await api.getDatasets();
-  const datasets = JSON.parse(JSON.stringify(raw));
+  const datasets: DatasetType[] = JSON.parse(JSON.stringify(raw));
 
-  const open = datasets.filter((d: any) => !d.requires_request);
-  const restricted = datasets.filter((d: any) => d.requires_request);
+  const open = datasets.filter((d) => !d.requires_request);
+  const restricted = datasets.filter((d) => d.requires_request);
 
   return (
     <div className="w-full bg-background">
@@ -66,7 +67,7 @@ export default async function DatasetsPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-            {open.map((dataset: any) => (
+            {open.map((dataset) => (
               <DatasetCardClient key={dataset.id} dataset={dataset} />
             ))}
           </div>
@@ -89,7 +90,7 @@ export default async function DatasetsPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-            {restricted.map((dataset: any) => (
+            {restricted.map((dataset) => (
               <DatasetCardClient key={dataset.id} dataset={dataset} />
             ))}
           </div>

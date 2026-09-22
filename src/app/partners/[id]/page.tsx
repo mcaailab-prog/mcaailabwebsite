@@ -20,7 +20,7 @@ export default async function PartnerPage({ params }: { params: { id: string } }
     return (
       <div className="max-w-4xl mx-auto py-20 px-4">
         <h1 className="text-2xl font-bold">Partner not found</h1>
-        <p className="mt-4">We couldn't find the partner you're looking for.</p>
+        <p className="mt-4">We couldn&apos;t find the partner you&apos;re looking for.</p>
         <p className="mt-6"><Link href="/partners" className="text-primary hover:underline">Back to partners</Link></p>
       </div>
     );

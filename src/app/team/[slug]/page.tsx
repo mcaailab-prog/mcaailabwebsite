@@ -8,12 +8,24 @@ import { FiArrowLeft, FiMail, FiExternalLink, FiArrowRight } from 'react-icons/f
 import { FaGoogleScholar } from 'react-icons/fa6';
 
 // ── Buffer → base64 data URL ─────────────────────────────────────────────────
-function bufferToUrl(value: any, mime = 'image/jpeg'): string | null {
+// `value` is declared as `string` on these types but MongoDB can hand back a
+// raw binary blob (or its JSON-serialised form) for legacy records, so it's
+// accepted as `unknown` and narrowed rather than trusted.
+function isSerializedBuffer(value: unknown): value is { type: 'Buffer'; data: number[] } {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    (value as Record<string, unknown>).type === 'Buffer' &&
+    Array.isArray((value as Record<string, unknown>).data)
+  );
+}
+
+function bufferToUrl(value: unknown, mime = 'image/jpeg'): string | null {
   if (!value) return null;
   if (typeof value === 'string') return value;
   if (value instanceof Uint8Array || Buffer.isBuffer(value))
     return `data:${mime};base64,${Buffer.from(value).toString('base64')}`;
-  if (value?.type === 'Buffer' && Array.isArray(value.data))
+  if (isSerializedBuffer(value))
     return `data:${mime};base64,${Buffer.from(value.data).toString('base64')}`;
   return null;
 }
@@ -25,7 +37,7 @@ function serializePublication(p: PublicationType): PublicationType {
   return { ...p, pdf_file: bufferToUrl(p.pdf_file, 'application/pdf') ?? p.pdf_file };
 }
 function serializeProject(p: ProjectType): ProjectType {
-  return { ...p, team_members: p.team_members?.map((m: any) => serializeMember(m)) };
+  return { ...p, team_members: p.team_members?.map((m) => serializeMember(m)) };
 }
 
 function stripHtml(html: string): string {
@@ -375,17 +387,6 @@ export default async function TeamMemberProfilePage({
                             style={{ color: '#72C6D5' }}
                           >
                             DOI ↗
-                          </a>
-                        )}
-                        {(pub as any).external_url && (
-                          <a
-                            href={(pub as any).external_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[11px] font-semibold hover:underline transition-colors"
-                            style={{ color: '#72C6D5' }}
-                          >
-                            View ↗
                           </a>
                         )}
                         {pub.pdf_file && (

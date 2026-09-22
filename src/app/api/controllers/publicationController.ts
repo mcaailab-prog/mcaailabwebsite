@@ -5,7 +5,7 @@ import { Publication } from '@/app/api/models/Publication';
 export const getPublications = async (req: Request, res: Response) => {
   try {
     const { year, search } = req.query;
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
 
     if (year) filter.year = parseInt(year as string);
     if (search) {
@@ -23,8 +23,9 @@ export const getPublications = async (req: Request, res: Response) => {
       .populate('projects');
 
     res.json(publications);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ error: message });
   }
 };
 
@@ -36,8 +37,9 @@ export const createPublication = async (req: Request, res: Response) => {
     await publication.populate('research_areas');
     await publication.populate('projects');
     res.status(201).json(publication);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(400).json({ error: message });
   }
 };
 
@@ -52,8 +54,9 @@ export const getPublicationById = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Publication not found' });
         }
         res.json(publication);
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }
 
@@ -68,8 +71,9 @@ export const updatePublication = async (req: Request, res: Response) => {
         await publication.populate('research_areas');
         await publication.populate('projects');
         res.json(publication);
-    } catch (error: any) {
-        res.status(400).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(400).json({ error: message });
     }
 }
 
@@ -82,7 +86,8 @@ export const deletePublication = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Publication not found' });
         }
         res.json({ message: 'Publication deleted successfully' });
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: message });
     }
 }

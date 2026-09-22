@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, checkDBConnection } from '@/app/api/utils/connectDB';
+import { Dataset } from '@/app/api/models/Dataset';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Check database connection
@@ -15,7 +16,6 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
   }
 
   try {
-    const Dataset = require('@/app/api/models/Dataset').Dataset;
     const params = await context.params;
     const { id } = params;
     const dataset = await Dataset.findById(id);
@@ -25,8 +25,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(dataset)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -45,7 +46,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
   try {
     const body = await request.json();
-    const Dataset = require('@/app/api/models/Dataset').Dataset;
     const params = await context.params;
     const { id } = params;
     const dataset = await Dataset.findByIdAndUpdate(id, body, { new: true });
@@ -55,8 +55,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     }
 
     return NextResponse.json(JSON.parse(JSON.stringify(dataset)));
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
@@ -74,7 +75,6 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
   }
 
   try {
-    const Dataset = require('@/app/api/models/Dataset').Dataset;
     const params = await context.params;
     const { id } = params;
     const dataset = await Dataset.findByIdAndDelete(id);
@@ -84,7 +84,8 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
     }
 
     return NextResponse.json({ message: 'Dataset deleted successfully' });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

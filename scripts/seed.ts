@@ -952,7 +952,7 @@ async function main() {
     // Helper to make slugs for author names/orgs
     const slugifyName = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
-    const publicationDocs: any[] = [];
+    const publicationDocs: Record<string, unknown>[] = [];
     for (const publication of publicationSeeds) {
       // Parse authors into tokens. This is forgiving and will treat organizations as authors as well.
       const rawAuthors = (publication.authors || '') as string;
