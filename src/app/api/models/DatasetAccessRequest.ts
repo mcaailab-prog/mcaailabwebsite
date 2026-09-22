@@ -52,10 +52,11 @@ datasetAccessRequestSchema.virtual('id').get(function(this: IDatasetAccessReques
 // Ensure virtual fields are serialized
 datasetAccessRequestSchema.set('toJSON', {
   virtuals: true,
-  transform: (doc: IDatasetAccessRequest, ret: any) => {
-    delete ret._id;
-    delete ret.__v;
-    return ret;
+  transform: (doc: IDatasetAccessRequest, ret) => {
+    const plain = ret as unknown as Record<string, unknown>;
+    delete plain._id;
+    delete plain.__v;
+    return plain;
   }
 });
 

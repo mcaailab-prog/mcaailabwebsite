@@ -39,7 +39,7 @@ const eventSchema = new Schema<IEvent>({
 });
 
 eventSchema.virtual('id').get(function(this: IEvent) { return this._id.toHexString(); });
-eventSchema.set('toJSON', { virtuals: true, transform: (doc: IEvent, ret: any) => { delete ret._id; delete ret.__v; return ret; } });
+eventSchema.set('toJSON', { virtuals: true, transform: (doc: IEvent, ret) => { const plain = ret as unknown as Record<string, unknown>; delete plain._id; delete plain.__v; return plain; } });
 
 export const Event =
   (mongoose.models && mongoose.models['Event']) ||

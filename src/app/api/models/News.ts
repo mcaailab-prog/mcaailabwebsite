@@ -40,7 +40,7 @@ newsSchema.index({
 });
 
 newsSchema.virtual('id').get(function(this: INews) { return this._id.toHexString(); });
-newsSchema.set('toJSON', { virtuals: true, transform: (doc: INews, ret: any) => { delete ret._id; delete ret.__v; return ret; } });
+newsSchema.set('toJSON', { virtuals: true, transform: (doc: INews, ret) => { const plain = ret as unknown as Record<string, unknown>; delete plain._id; delete plain.__v; return plain; } });
 
 export const News =
   (mongoose.models && mongoose.models['News']) ||
