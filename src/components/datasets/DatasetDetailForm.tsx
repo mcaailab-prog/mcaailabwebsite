@@ -36,7 +36,7 @@ export default function DatasetDetailForm({ dataset }: DatasetDetailFormProps) {
 
     try {
       const requestData = {
-        dataset: (dataset as any).id ?? (dataset as any)._id ?? null,
+        dataset: dataset.id ?? null,
         ...formData,
       };
 
@@ -58,7 +58,7 @@ export default function DatasetDetailForm({ dataset }: DatasetDetailFormProps) {
         institution: '',
         purpose: '',
       });
-    } catch (_) {
+    } catch {
       setSubmitStatus({
         type: 'error',
         message: 'Failed to submit request. Please try again later.',
