@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { api } from '@/lib/api';
 import type { TeamMemberType } from '@/lib/api-types';
+import { isLabTeamMember } from '@/lib/team';
 import TeamPageClient from './TeamPageClient';
 
 export const metadata: Metadata = {
@@ -40,6 +41,6 @@ function serializeMember(m: TeamMemberType): TeamMemberType {
 
 export default async function TeamPage() {
   const raw = await api.getTeamMembers();
-  const teamMembers = (raw as TeamMemberType[]).map(serializeMember);
+  const teamMembers = (raw as TeamMemberType[]).filter(isLabTeamMember).map(serializeMember);
   return <TeamPageClient teamMembers={teamMembers} />;
 }

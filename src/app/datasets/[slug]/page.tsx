@@ -9,6 +9,9 @@ import {
 } from 'react-icons/fi';
 import RichTextRenderer from '@/components/ui/RichTextRenderer';
 import DatasetRequestAction from '@/components/datasets/DatasetRequestAction';
+import { canOpenDataset } from '@/lib/datasets';
+
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -120,7 +123,9 @@ export default async function DatasetDetailPage({
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-on-surface-variant">
                   {isOpen
-                    ? 'This dataset is available for access under the CC BY license.'
+                    ? canOpenDataset(dataset)
+                      ? 'This dataset is openly available. Use the link below to open the repository.'
+                      : 'This dataset is available under the published license. Contact the team if you need help locating the files.'
                     : 'This dataset is subject to access review. Requests are typically reviewed within a few business days.'}
                 </p>
               </div>

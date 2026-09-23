@@ -4,6 +4,7 @@ import { api } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import RichTextRenderer from '@/components/ui/RichTextRenderer';
 import type { ResearchAreaType, TeamMemberType } from '@/lib/api-types';
+import { isLabTeamMember } from '@/lib/team';
 
 const slugify = (s: string) =>
   s
@@ -66,6 +67,7 @@ export default async function ResearchAreaDetailPage({
 
   const relatedTeamMembers = relatedProjects
     .flatMap((project) => project.team_members ?? [])
+    .filter(isLabTeamMember)
     .reduce<TeamMemberType[]>((members, member) => {
       if (!members.some((existing) => existing.id === member.id || existing.slug === member.slug)) {
         members.push(member);
@@ -187,7 +189,7 @@ export default async function ResearchAreaDetailPage({
                 <p className="mt-2 text-sm text-slate-600">Active research projects in this area</p>
               </div>
               <div className="rounded-3xl border border-[#e8f2e8] bg-[#f3fbf3] p-6 shadow-sm">
-                <p className="text-sm uppercase tracking-[0.3em] text-slate-500 mb-3">Collaborators</p>
+                <p className="text-sm uppercase tracking-[0.3em] text-slate-500 mb-3">Team</p>
                 <p className="text-3xl font-semibold text-slate-900">{relatedTeamMembers.length}</p>
                 <p className="mt-2 text-sm text-slate-600">Researchers working on this area</p>
               </div>
@@ -226,7 +228,7 @@ export default async function ResearchAreaDetailPage({
             </div>
 
             <div className="pt-8 border-t border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900 mb-5">Research Collaborators</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-5">Team</h3>
               {relatedTeamMembers.length > 0 ? (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {relatedTeamMembers.map((member) => (
@@ -247,7 +249,7 @@ export default async function ResearchAreaDetailPage({
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-600">No collaborators have been linked yet.</p>
+                <p className="text-gray-600">No team members have been linked yet.</p>
               )}
             </div>
 

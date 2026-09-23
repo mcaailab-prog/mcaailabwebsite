@@ -3,7 +3,10 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import type { DatasetType } from '@/lib/api';
 import DatasetCardClient from '@/components/datasets/DatasetCardClient';
-import { FiLock, FiUnlock, FiDatabase, FiArrowRight } from 'react-icons/fi';
+import { LAB_HUGGINGFACE_ORGS } from '@/lib/datasets';
+import { FiLock, FiUnlock, FiDatabase, FiArrowRight, FiExternalLink } from 'react-icons/fi';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Datasets - MCAAI',
@@ -47,6 +50,32 @@ export default async function DatasetsPage() {
               className="flex-1 border-none bg-transparent py-3 text-[14px] text-on-surface placeholder:text-outline-variant/70 focus:outline-none md:text-[16px]"
             />
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1280px] px-4 pb-4 sm:px-8 lg:px-16">
+        <div className="mb-6 flex items-center gap-4">
+          <h2 className="font-montserrat text-[20px] font-semibold text-primary sm:text-[28px]">
+            Our Hugging Face
+          </h2>
+          <div className="h-px flex-1 bg-outline-variant/50" />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {LAB_HUGGINGFACE_ORGS.map((org) => (
+            <a
+              key={org.href}
+              href={org.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-md"
+            >
+              <p className="mb-2 inline-flex items-center gap-2 font-montserrat text-[16px] font-bold text-primary">
+                {org.name}
+                <FiExternalLink size={14} className="text-on-surface-variant transition-colors group-hover:text-primary" />
+              </p>
+              <p className="text-[13px] leading-relaxed text-on-surface-variant">{org.blurb}</p>
+            </a>
+          ))}
         </div>
       </section>
 

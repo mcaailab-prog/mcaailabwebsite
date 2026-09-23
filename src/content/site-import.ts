@@ -32,7 +32,7 @@ export const importProjects = [
     funder_names: ['INOVATION FOR DEVELOPMENT (I4D)', 'AFRICAN CENTRE FOR TECHNOLOGY STUDIES (ACTS)'],
     links: [
       { label: 'Project Profile', href: 'https://mcaai.maseno.ac.ke/' },
-      { label: 'LinkedIn', href: 'https://www.linkedin.com/company/107030600/admin/dashboard/' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/company/maseno-centre-for-applied-artificial-intelligence/' },
     ],
     order: 1,
   },
@@ -58,6 +58,7 @@ export const importProjects = [
     member_names: ['Dr. Lilian Wanzare', 'Jerry John Kponyo', 'Maseno University team', 'Kwame Nkrumah University of Science and Technology partners'],
     funder_names: ['IDRC', 'AI4D Funders Collaborative', 'FCDO', 'Sida', 'Community Jameel'],
     links: [
+      { label: 'HAIDI platform', href: 'https://addn-haidi.vercel.app/' },
       { label: 'IDRC Project Page', href: 'https://idrc-crdi.ca/en/what-we-do/projects-we-support/project/ai4d-hub-ai-and-disability-inclusion' },
       { label: 'AI4D Project Page', href: 'https://www.ai4d.ai/projects/hub-for-ai-and-disability-inclusion' },
       { label: 'Project Website', href: 'https://haidiai4d.org/' },
@@ -282,12 +283,32 @@ export const importCollaboration = {
   cta_body:
     'Whether you are a disability-inclusive AI venture seeking funding, a researcher interested in the evidence base programme, or an institution looking to embed accessibility into AI governance — there is a role for you in HAIDI.',
   links: [
+    { label: 'HAIDI platform', href: 'https://addn-haidi.vercel.app/' },
     { label: 'View AI4KSL Project', href: '/projects/ai4ksl-bridging-language-barrier-using-ai-for-kenyan-sign-language' },
   ],
   related_project_slug: 'ai4ksl-bridging-language-barrier-using-ai-for-kenyan-sign-language',
   is_published: true,
   order: 1,
 };
+
+export const importDatasetLinks = [
+  {
+    slug: 'afrivoices-ke-multilingual-speech-dataset-for-kenyan-languages',
+    download_url: 'https://huggingface.co/Anv-ke',
+  },
+  {
+    slug: 'politikweli-swahili-english-code-switched-twitter-political-misinformation-classification-dataset',
+    download_url: 'https://github.com/jayneamol/kweli',
+  },
+  {
+    slug: 'global-piqa-evaluating-commonsense-reasoning-across-100-languages-and-cultures',
+    download_url: 'https://huggingface.co/datasets/mrlbenchmarks/global-piqa-nonparallel',
+  },
+  {
+    slug: 'commonlid-re-evaluating-state-of-the-art-language-identification-performance-on-web-data',
+    download_url: 'https://huggingface.co/datasets/commoncrawl/CommonLID',
+  },
+] as const;
 
 export const importInnovations = [
   {

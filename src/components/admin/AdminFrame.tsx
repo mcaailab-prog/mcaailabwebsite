@@ -8,10 +8,12 @@ const NAV = [
   { href: '/admin', label: 'Overview' },
   { href: '/admin/news', label: 'News' },
   { href: '/admin/events', label: 'Events' },
+  { href: '/admin/team', label: 'Team' },
   { href: '/admin/projects', label: 'Projects' },
   { href: '/admin/research', label: 'Research areas' },
   { href: '/admin/collaborations', label: 'Collaborations' },
   { href: '/admin/innovations', label: 'Innovations' },
+  { href: '/admin/datasets', label: 'Datasets' },
   { href: '/admin/careers', label: 'Career tracks' },
   { href: '/admin/inbox', label: 'Inbox' },
 ];

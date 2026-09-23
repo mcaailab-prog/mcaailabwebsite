@@ -118,6 +118,10 @@ export default function AdminEditor({
   const defaults = useMemo(() => {
     const initial: Record<string, unknown> = {};
     resource.fields.forEach((field) => {
+      if (field.defaultValue !== undefined) {
+        initial[field.name] = field.defaultValue;
+        return;
+      }
       if (field.type === 'checkbox') initial[field.name] = true;
       if (field.type === 'number') initial[field.name] = 0;
     });
@@ -276,6 +280,73 @@ function setNested(data: Record<string, unknown>, path: string, value: unknown) 
   });
 }
 
+function ImageField({
+  field,
+  value,
+  onChange,
+  onUpload,
+  inputClass,
+}: {
+  field: AdminField;
+  value: unknown;
+  onChange: (value: unknown) => void;
+  onUpload: (file: File) => Promise<void>;
+  inputClass: string;
+}) {
+  const [status, setStatus] = useState<'idle' | 'uploading' | 'saved' | 'error'>('idle');
+  const [message, setMessage] = useState('');
+  const url = typeof value === 'string' ? value : '';
+
+  return (
+    <div className="block text-sm font-medium">
+      <span>{field.label}</span>
+      <input
+        className={inputClass}
+        value={url}
+        onChange={(e) => {
+          onChange(e.target.value);
+          setStatus(e.target.value ? 'saved' : 'idle');
+          setMessage('');
+        }}
+        placeholder="Cloudinary URL"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        disabled={status === 'uploading'}
+        className="mt-2 text-sm"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          setStatus('uploading');
+          setMessage('Uploading to Cloudinary folder mcaai…');
+          try {
+            await onUpload(file);
+            setStatus('saved');
+            setMessage('Upload saved. The public Cloudinary URL is stored on this record.');
+          } catch (err) {
+            setStatus('error');
+            setMessage(err instanceof Error ? err.message : 'Upload failed');
+          } finally {
+            e.target.value = '';
+          }
+        }}
+      />
+      {status === 'uploading' ? (
+        <p className="mt-2 text-xs text-on-surface-variant">{message}</p>
+      ) : null}
+      {status === 'saved' && url ? (
+        <p className="mt-2 break-all text-xs text-university-deep-blue">{message || 'Saved image URL'} — {url}</p>
+      ) : null}
+      {status === 'error' ? <p className="mt-2 text-xs text-error">{message}</p> : null}
+      {url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={url} alt="" className="mt-2 h-24 rounded-lg object-cover" />
+      ) : null}
+    </div>
+  );
+}
+
 function FieldControl({
   field,
   value,
@@ -315,25 +386,7 @@ function FieldControl({
   }
 
   if (field.type === 'image') {
-    return (
-      <label className="block text-sm font-medium">
-        {field.label}
-        <input className={inputClass} value={String(value || '')} onChange={(e) => onChange(e.target.value)} placeholder="Image URL" />
-        <input
-          type="file"
-          accept="image/*"
-          className="mt-2 text-sm"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) onUpload(file).catch((err) => alert(err.message));
-          }}
-        />
-        {typeof value === 'string' && value ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={value} alt="" className="mt-2 h-24 rounded-lg object-cover" />
-        ) : null}
-      </label>
-    );
+    return <ImageField field={field} value={value} onChange={onChange} onUpload={onUpload} inputClass={inputClass} />;
   }
 
   if (field.type === 'textarea' || field.type === 'list' || field.type === 'links' || field.type === 'users' || field.type === 'objectives' || field.type === 'pairs') {

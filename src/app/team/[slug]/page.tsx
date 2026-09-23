@@ -224,6 +224,7 @@ export default async function TeamMemberProfilePage({
             style={{ color: '#72C6D5' }}
           >
             {member.title}
+            {member.degree && member.degree !== 'None' ? ` · ${member.degree}` : ''}
           </p>
 
           {/* Name — university-gold, the hero typographic moment */}
@@ -327,6 +328,33 @@ export default async function TeamMemberProfilePage({
                 "
               />
             </div>
+
+            {(member.thesis_title || member.thesis_summary) ? (
+              <div className="bg-white border border-[#bec8cb]/40 rounded-2xl p-6 sm:p-8">
+                <h2
+                  className="font-montserrat font-bold text-[18px] mb-5 pb-4 border-b border-[#bec8cb]/40"
+                  style={{ color: '#003399' }}
+                >
+                  Thesis
+                </h2>
+                {member.degree && member.degree !== 'None' ? (
+                  <p className="mb-2 text-[12px] font-bold uppercase tracking-widest text-[#72C6D5]">
+                    {member.degree}
+                  </p>
+                ) : null}
+                {member.thesis_title ? (
+                  <h3 className="mb-3 font-montserrat text-[16px] font-bold text-[#003399]">
+                    {member.thesis_title}
+                  </h3>
+                ) : null}
+                {member.thesis_summary ? (
+                  <RichTextRenderer
+                    content={member.thesis_summary}
+                    className="text-[14px] sm:text-[15px] text-[#3e484b] leading-relaxed [&_p]:mb-4 [&_p:last-child]:mb-0"
+                  />
+                ) : null}
+              </div>
+            ) : null}
 
             {/* Research Focus */}
             <div className="bg-white border border-[#bec8cb]/40 rounded-2xl p-6 sm:p-8">

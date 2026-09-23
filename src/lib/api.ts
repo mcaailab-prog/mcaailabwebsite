@@ -15,6 +15,7 @@ import { DatasetAccessRequest } from '@/app/api/models/DatasetAccessRequest';
 import { Collaboration } from '@/app/api/models/Collaboration';
 import { Innovation } from '@/app/api/models/Innovation';
 import { CareerTrack } from '@/app/api/models/CareerTrack';
+import { isLabTeamMember } from '@/lib/team';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -43,6 +44,9 @@ export interface TeamMemberType {
   linkedin: string;
   google_scholar: string;
   research_interests: string;
+  degree?: 'None' | 'MSc' | 'PhD' | string;
+  thesis_title?: string;
+  thesis_summary?: string;
   order: number;
   created_at: string;
   updated_at: string;
@@ -344,7 +348,7 @@ export const api = {
   async getTeamMembers(): Promise<TeamMemberType[]> {
     await db();
     const docs = await TeamMember.find().sort({ order: 1 }).lean();
-    return normalize<TeamMemberType>(docs);
+    return normalize<TeamMemberType>(docs).filter(isLabTeamMember);
   },
 
   async getPartners(filters?: { partner_type?: string }): Promise<PartnerType[]> {

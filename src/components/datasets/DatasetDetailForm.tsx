@@ -204,9 +204,13 @@ export default function DatasetDetailForm({ dataset }: DatasetDetailFormProps) {
                       href={dataset.download_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full px-6 py-3 bg-[#65C1CF] text-white rounded-lg hover:bg-[darken(#65C1CF,10%)] transition-colors"
+                      className="inline-flex w-full items-center justify-center px-6 py-3 bg-[#65C1CF] text-white rounded-lg hover:bg-[darken(#65C1CF,10%)] transition-colors"
                     >
-                      Download Dataset
+                      {dataset.download_url.toLowerCase().includes('huggingface.co')
+                        ? 'Open on Hugging Face'
+                        : dataset.download_url.toLowerCase().includes('github.com')
+                          ? 'Open on GitHub'
+                          : 'Open dataset'}
                     </a>
                   </div>
                 ) : null}

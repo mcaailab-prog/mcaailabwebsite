@@ -29,6 +29,9 @@ export type TeamMemberType = {
   linkedin?: string | null;
   google_scholar?: string | null;
   research_interests?: string | null;
+  degree?: 'None' | 'MSc' | 'PhD' | string | null;
+  thesis_title?: string | null;
+  thesis_summary?: string | null;
   order?: number;
   created_at?: string;
   updated_at?: string;

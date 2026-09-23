@@ -973,21 +973,8 @@ async function main() {
             id = existing._id as mongoose.Types.ObjectId;
             teamMemberSlugToId.set(existing.slug, id);
             } else {
-            // Create a minimal TeamMember record for this author/org
-            const created = await TeamMember.create({
-              name: authorName,
-              slug,
-              title: 'Collaborator',
-              bio: 'No bio provided.',
-              photo: '',
-              email: '',
-              linkedin: '',
-              google_scholar: '',
-              research_interests: '',
-              order: 999
-            });
-            id = created._id as mongoose.Types.ObjectId;
-            teamMemberSlugToId.set(slug, id);
+            // Keep publication author strings; do not invent team records for paper authors.
+            continue;
           }
         }
         if (id) teamAuthorIds.push(id);

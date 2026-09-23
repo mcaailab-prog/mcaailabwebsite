@@ -40,7 +40,7 @@ export default function Footer() {
               <a href="#" aria-label="Twitter" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-inverse-on-surface/60 hover:text-mcaai-teal hover:border-mcaai-teal transition-colors">
                 <FaTwitter size={16} />
               </a>
-              <a href="https://www.linkedin.com/company/maseno-centre-for-applied-artificial-intelligence/posts/?feedView=all" aria-label="LinkedIn" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-inverse-on-surface/60 hover:text-mcaai-teal hover:border-mcaai-teal transition-colors">
+              <a href="https://www.linkedin.com/company/maseno-centre-for-applied-artificial-intelligence/" aria-label="LinkedIn" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-inverse-on-surface/60 hover:text-mcaai-teal hover:border-mcaai-teal transition-colors">
                 <FaLinkedin size={16} />
               </a>
               <a href="mailto:mcaai@maseno.ac.ke" aria-label="Email" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-inverse-on-surface/60 hover:text-mcaai-teal hover:border-mcaai-teal transition-colors">

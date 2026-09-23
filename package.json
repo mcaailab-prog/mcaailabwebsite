@@ -9,6 +9,7 @@
     "lint": "eslint",
     "seed": "npx tsx scripts/seed.ts",
     "import:public": "npx tsx scripts/import-public-content.ts",
+    "cleanup:collaborators": "npx tsx scripts/cleanup-collaborators.ts",
     "migrate:posts": "node scripts/migrate-posts.js",
     "migrate:posts:drop": "node scripts/migrate-posts.js --drop"
   },

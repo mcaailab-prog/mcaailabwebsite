@@ -100,15 +100,25 @@ export default function CollaborationView({ collaboration }: { collaboration: Co
                       Related project <FiArrowRight size={13} />
                     </Link>
                   ) : null}
-                  {(collaboration.links || []).map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="inline-flex items-center gap-2 rounded-lg border border-primary/25 bg-surface-container-lowest px-5 py-2.5 font-montserrat text-[13px] font-bold text-primary"
-                    >
-                      {link.label} <FiArrowUpRight size={13} />
-                    </Link>
-                  ))}
+                  {(collaboration.links || []).map((link) => {
+                    const external = /^https?:\/\//i.test(link.href);
+                    const className = 'inline-flex items-center gap-2 rounded-lg border border-primary/25 bg-surface-container-lowest px-5 py-2.5 font-montserrat text-[13px] font-bold text-primary';
+                    return external ? (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={className}
+                      >
+                        {link.label} <FiArrowUpRight size={13} />
+                      </a>
+                    ) : (
+                      <Link key={link.href} href={link.href} className={className}>
+                        {link.label} <FiArrowUpRight size={13} />
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
 

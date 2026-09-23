@@ -46,7 +46,7 @@ const researchWorkProjects: {
     funders: ['Gates Foundation', 'Strathmore University', 'SAFIC initiative'],
     links: [
       { label: 'Project Profile', href: 'https://mcaai.maseno.ac.ke/' },
-      { label: 'LinkedIn', href: 'https://www.linkedin.com/company/107030600/admin/dashboard/' }
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/company/maseno-centre-for-applied-artificial-intelligence/' }
     ],
     theme: { primary: '#123a6b', secondary: '#2d7d66' }
   },
@@ -67,6 +67,7 @@ const researchWorkProjects: {
     members: ['Dr. Lilian Wanzare', 'Jerry John Kponyo', 'Maseno University team', 'Kwame Nkrumah University of Science and Technology partners'],
     funders: ['IDRC', 'AI4D Funders Collaborative', 'FCDO', 'Sida', 'Community Jameel'],
     links: [
+      { label: 'HAIDI platform', href: 'https://addn-haidi.vercel.app/' },
       { label: 'IDRC Project Page', href: 'https://idrc-crdi.ca/en/what-we-do/projects-we-support/project/ai4d-hub-ai-and-disability-inclusion' },
       { label: 'AI4D Project Page', href: 'https://www.ai4d.ai/projects/hub-for-ai-and-disability-inclusion' },
       { label: 'Project Website', href: 'https://haidiai4d.org/' }

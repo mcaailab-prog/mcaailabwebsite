@@ -20,6 +20,7 @@ export type AdminField = {
   required?: boolean;
   options?: { value: string; label: string }[];
   hint?: string;
+  defaultValue?: unknown;
 };
 
 export type AdminResource = {
@@ -188,6 +189,58 @@ export const adminResources: Record<string, AdminResource> = {
       { name: 'details', label: 'Sidebar details (label | value)', type: 'pairs' },
       { name: 'order', label: 'Display order', type: 'number' },
       { name: 'is_published', label: 'Show on public site', type: 'checkbox' },
+    ],
+  },
+  team: {
+    key: 'team',
+    title: 'Team members',
+    singular: 'Team member',
+    api: '/api/team',
+    titleField: 'name',
+    subtitleField: 'title',
+    fields: [
+      { name: 'name', label: 'Full name', type: 'text', required: true },
+      { name: 'slug', label: 'Slug', type: 'text', required: true, hint: 'URL path, lowercase with hyphens' },
+      { name: 'title', label: 'Role / title', type: 'text', required: true },
+      { name: 'photo', label: 'Photo', type: 'image' },
+      { name: 'bio', label: 'Bio', type: 'textarea', required: true },
+      { name: 'research_interests', label: 'Research interests', type: 'textarea' },
+      { name: 'email', label: 'Email', type: 'text' },
+      { name: 'linkedin', label: 'LinkedIn URL', type: 'text' },
+      { name: 'google_scholar', label: 'Google Scholar URL', type: 'text' },
+      {
+        name: 'degree',
+        label: 'Degree',
+        type: 'select',
+        defaultValue: 'None',
+        options: [
+          { value: 'None', label: 'None' },
+          { value: 'MSc', label: 'MSc' },
+          { value: 'PhD', label: 'PhD' },
+        ],
+      },
+      { name: 'thesis_title', label: 'Thesis title', type: 'text', hint: 'For student researchers. Leave blank if none.' },
+      { name: 'thesis_summary', label: 'Thesis writeup', type: 'textarea', hint: 'Short public summary of the thesis work.' },
+      { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
+  datasets: {
+    key: 'datasets',
+    title: 'Datasets',
+    singular: 'Dataset',
+    api: '/api/datasets',
+    titleField: 'name',
+    subtitleField: 'slug',
+    fields: [
+      { name: 'name', label: 'Name', type: 'text', required: true },
+      { name: 'slug', label: 'Slug', type: 'text', required: true, hint: 'URL path, lowercase with hyphens' },
+      { name: 'language', label: 'Language', type: 'text', required: true },
+      { name: 'size_description', label: 'Size', type: 'text', required: true },
+      { name: 'format', label: 'Format', type: 'text', required: true },
+      { name: 'license', label: 'License', type: 'text', required: true },
+      { name: 'description', label: 'Description', type: 'textarea', required: true },
+      { name: 'download_url', label: 'Download / Hugging Face / GitHub URL', type: 'text', hint: 'Shown publicly when the dataset does not require a request' },
+      { name: 'requires_request', label: 'Requires access request', type: 'checkbox', defaultValue: false },
     ],
   },
   careers: {

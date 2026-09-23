@@ -243,7 +243,9 @@ export default function TeamPageClient({ teamMembers }: { teamMembers: TeamMembe
         m.name.toLowerCase().includes(q) ||
         title.includes(q) ||
         (m.research_interests ?? '').toLowerCase().includes(q) ||
-        (m.bio ?? '').toLowerCase().includes(q)
+        (m.bio ?? '').toLowerCase().includes(q) ||
+        (m.thesis_title ?? '').toLowerCase().includes(q) ||
+        (m.thesis_summary ?? '').toLowerCase().includes(q)
       );
     });
   }, [query, teamMembers]);
@@ -587,9 +589,20 @@ function AssociateCard({ member }: { member: TeamMemberType }) {
         </div>
       </div>
 
-      {/* HTML-parsed bio */}
+      {member.degree && member.degree !== 'None' ? (
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-[#003399]">
+          {member.degree} researcher
+        </p>
+      ) : null}
+
+      {member.thesis_title ? (
+        <p className="mb-2 text-[12px] font-semibold leading-snug text-[#003399]">
+          {member.thesis_title}
+        </p>
+      ) : null}
+
       <SafeHTML
-        html={member.bio}
+        html={member.thesis_summary || member.bio}
         className="text-[12px] text-[#3e484b] leading-relaxed line-clamp-3 flex-grow prose-sm"
       />
 

@@ -11,6 +11,9 @@ export interface ITeamMember extends Document {
   linkedin: string;
   google_scholar: string;
   research_interests: string;
+  degree: 'None' | 'MSc' | 'PhD';
+  thesis_title: string;
+  thesis_summary: string;
   order: number;
   createdAt: Date;
   updatedAt: Date;
@@ -59,6 +62,19 @@ const teamMemberSchema = new Schema<ITeamMember>({
     default: ''
   },
   research_interests: {
+    type: String,
+    default: ''
+  },
+  degree: {
+    type: String,
+    enum: ['None', 'MSc', 'PhD'],
+    default: 'None'
+  },
+  thesis_title: {
+    type: String,
+    default: ''
+  },
+  thesis_summary: {
     type: String,
     default: ''
   },
