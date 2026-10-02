@@ -18,6 +18,7 @@ const NAV = [
   { href: '/admin/datasets', label: 'Datasets' },
   { href: '/admin/careers', label: 'Career tracks' },
   { href: '/admin/inbox', label: 'Inbox' },
+  { href: '/admin/admin-users', label: 'Admins' },
 ];
 
 export default function AdminFrame({ children }: { children: React.ReactNode }) {
