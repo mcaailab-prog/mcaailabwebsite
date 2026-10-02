@@ -207,6 +207,13 @@ export default function AdminEditor({
           });
           setNested(payload, field.name, rows);
         }
+        // A blank password on an existing record means "leave it unchanged" -
+        // omit it entirely rather than send an empty string that would
+        // overwrite the real password. New records still send it through so
+        // the API's own "password is required" validation can catch it.
+        if (field.type === 'password' && !isNew && !value) {
+          delete payload[field.name];
+        }
       });
 
       const res = await fetch(isNew ? resource.api : `${resource.api}/${id}`, {
@@ -442,6 +449,22 @@ function FieldControl({
         {field.type === 'users' ? <span className="mt-1 block text-xs text-on-surface-variant">One per line: Role | description</span> : null}
         {field.type === 'objectives' ? <span className="mt-1 block text-xs text-on-surface-variant">One per line: 01 || Title || Body || accent</span> : null}
         {field.type === 'pairs' ? <span className="mt-1 block text-xs text-on-surface-variant">One per line: Label | value</span> : null}
+      </label>
+    );
+  }
+
+  if (field.type === 'password') {
+    return (
+      <label className="block text-sm font-medium">
+        {field.label}
+        <input
+          type="password"
+          autoComplete="new-password"
+          className={inputClass}
+          value={String(value || '')}
+          onChange={(e) => onChange(e.target.value)}
+        />
+        {field.hint ? <span className="mt-1 block text-xs text-on-surface-variant">{field.hint}</span> : null}
       </label>
     );
   }

@@ -15,6 +15,7 @@ const ADMIN_ONLY_GET_PREFIXES = [
   '/api/datasets/request',
   '/api/careers/applications',
   '/api/admin/',
+  '/api/admin-users',
 ];
 
 function isAdminOnlyGet(pathname: string) {
