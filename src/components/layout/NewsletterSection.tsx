@@ -1,20 +1,44 @@
 'use client';
 
 import { useState } from 'react';
+import { isValidNewsletterEmail, normalizeNewsletterEmail } from '@/lib/newsletter';
 
 export default function NewsletterStrip() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    setStatus('loading');
-    try {
-      setStatus('success');
-      setEmail('');
-    } catch {
+
+    const normalized = normalizeNewsletterEmail(email);
+    if (!isValidNewsletterEmail(normalized)) {
       setStatus('error');
+      setMessage('Please enter a valid email address.');
+      return;
+    }
+
+    setStatus('loading');
+    setMessage('');
+
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: normalized, source: 'site-footer' }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || 'Subscription failed');
+      }
+
+      setStatus('success');
+      setMessage(data?.message || 'You are subscribed — check your inbox.');
+      setEmail('');
+    } catch (error) {
+      setStatus('error');
+      setMessage(error instanceof Error ? error.message : 'Something went wrong.');
     }
   };
 
@@ -23,12 +47,12 @@ export default function NewsletterStrip() {
       <div className="max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-4">
 
         <p className="font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap shrink-0">
-         Subscribe to our Newsletter
+          Subscribe to our Newsletter
         </p>
 
         {status === 'success' ? (
           <p className="font-label-sm text-label-sm text-secondary">
-            ✓ Subscribed — check your inbox.
+            ✓ {message || 'Subscribed — check your inbox.'}
           </p>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-1 w-full">
@@ -51,7 +75,7 @@ export default function NewsletterStrip() {
         )}
 
         {status === 'error' && (
-          <p className="font-label-sm text-label-sm text-error">Something went wrong.</p>
+          <p className="font-label-sm text-label-sm text-error">{message || 'Something went wrong.'}</p>
         )}
 
       </div>

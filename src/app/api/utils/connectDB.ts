@@ -1,7 +1,4 @@
 import mongoose from 'mongoose';
-import * as dotenv from 'dotenv';
-// Load .env for server runtime when environment variables are not provided
-dotenv.config();
 // Ensure all models are registered on the mongoose instance early.
 import '@/app/api/models';
 

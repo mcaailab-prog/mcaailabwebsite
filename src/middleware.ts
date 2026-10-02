@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ADMIN_COOKIE, verifySessionToken } from '@/lib/admin-session';
+import { ADMIN_COOKIE } from '@/lib/admin-session';
 
 const PUBLIC_API_POST = new Set([
   '/api/admin/login',
   '/api/contact',
+  '/api/newsletter',
   '/api/datasets/request',
   '/api/careers/apply',
 ]);
 
 const ADMIN_ONLY_GET_PREFIXES = [
   '/api/contact',
+  '/api/newsletter',
   '/api/datasets/request',
   '/api/careers/applications',
   '/api/admin/',
@@ -23,16 +25,16 @@ function isAdminOnlyGet(pathname: string) {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const method = request.method.toUpperCase();
-  const session = await verifySessionToken(request.cookies.get(ADMIN_COOKIE)?.value);
+  const hasSessionCookie = Boolean(request.cookies.get(ADMIN_COOKIE)?.value);
 
   if (pathname.startsWith('/admin')) {
     if (pathname === '/admin/login') {
-      if (session) {
+      if (hasSessionCookie) {
         return NextResponse.redirect(new URL('/admin', request.url));
       }
       return NextResponse.next();
     }
-    if (!session) {
+    if (!hasSessionCookie) {
       const loginUrl = new URL('/admin/login', request.url);
       loginUrl.searchParams.set('next', pathname);
       return NextResponse.redirect(loginUrl);
@@ -51,7 +53,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (!session) {
+  if (!hasSessionCookie) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

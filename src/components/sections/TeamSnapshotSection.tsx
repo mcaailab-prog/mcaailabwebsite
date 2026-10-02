@@ -2,12 +2,23 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import type { TeamMemberType } from '@/lib/api-types';
 import { FiArrowRight } from 'react-icons/fi';
 
 export default function TeamSnapshotSection({ members = [] }: { members?: TeamMemberType[] }) {
-  // Show first 2 members (ordered by the `order` field from the DB)
-  const featured = members.slice(0, 2);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const updateViewport = () => setIsMobile(window.innerWidth < 768);
+
+    updateViewport();
+    window.addEventListener('resize', updateViewport);
+
+    return () => window.removeEventListener('resize', updateViewport);
+  }, []);
+
+  const featured = members.slice(0, isMobile ? 2 : 4);
 
   if (!featured.length) return null;
 
@@ -35,7 +46,7 @@ export default function TeamSnapshotSection({ members = [] }: { members?: TeamMe
         </div>
 
         {/* ── Member cards ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {featured.map((member) => (
             <Link
               key={member.id}

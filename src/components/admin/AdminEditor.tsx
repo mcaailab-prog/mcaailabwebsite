@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FiUploadCloud } from 'react-icons/fi';
 import type { AdminField, AdminResource } from '@/lib/admin-resources';
 import { slugify } from '@/lib/admin-resources';
 
@@ -296,6 +297,8 @@ function ImageField({
   const [status, setStatus] = useState<'idle' | 'uploading' | 'saved' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const url = typeof value === 'string' ? value : '';
+  const acceptedImageTypes = 'image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/heic,image/heif';
+  const maxImageSizeMB = 10;
 
   return (
     <div className="block text-sm font-medium">
@@ -309,29 +312,51 @@ function ImageField({
           setMessage('');
         }}
         placeholder="Cloudinary URL"
+        aria-label={`${field.label} URL`}
       />
-      <input
-        type="file"
-        accept="image/*"
-        disabled={status === 'uploading'}
-        className="mt-2 text-sm"
-        onChange={async (e) => {
-          const file = e.target.files?.[0];
-          if (!file) return;
-          setStatus('uploading');
-          setMessage('Uploading to Cloudinary folder mcaai…');
-          try {
-            await onUpload(file);
-            setStatus('saved');
-            setMessage('Upload saved. The public Cloudinary URL is stored on this record.');
-          } catch (err) {
-            setStatus('error');
-            setMessage(err instanceof Error ? err.message : 'Upload failed');
-          } finally {
-            e.target.value = '';
-          }
-        }}
-      />
+      <label className="mt-3 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-university-deep-blue px-4 py-3 text-sm font-black uppercase tracking-wide text-white shadow-sm transition hover:bg-[#0f2b59] disabled:cursor-not-allowed disabled:opacity-60">
+        <FiUploadCloud className="h-4 w-4" />
+        {status === 'uploading' ? 'Uploading…' : 'Upload image'}
+        <input
+          type="file"
+          accept={acceptedImageTypes}
+          disabled={status === 'uploading'}
+          className="hidden"
+          aria-label={`${field.label} upload`}
+          name={field.name}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+              setStatus('error');
+              setMessage('Please choose a valid image file.');
+              e.target.value = '';
+              return;
+            }
+
+            if (file.size > maxImageSizeMB * 1024 * 1024) {
+              setStatus('error');
+              setMessage(`Image is too large. Please upload an image under ${maxImageSizeMB}MB.`);
+              e.target.value = '';
+              return;
+            }
+
+            setStatus('uploading');
+            setMessage('Uploading to Cloudinary folder mcaai…');
+            try {
+              await onUpload(file);
+              setStatus('saved');
+              setMessage('Upload saved. The public Cloudinary URL is stored on this record.');
+            } catch (err) {
+              setStatus('error');
+              setMessage(err instanceof Error ? err.message : 'Upload failed');
+            } finally {
+              e.target.value = '';
+            }
+          }}
+        />
+      </label>
       {status === 'uploading' ? (
         <p className="mt-2 text-xs text-on-surface-variant">{message}</p>
       ) : null}
