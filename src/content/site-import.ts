@@ -12,7 +12,7 @@ export const PUBLIC_PROJECT_SLUGS = [
 export const importProjects = [
   {
     slug: 'acts-ai4d-dholuo-project',
-    title: 'ACTS - AI4D DHOLUO PROJECT',
+    title: 'ACTS AI4D DHOLUO PROJECT',
     short_title: 'ACTS Project',
     subtitle: 'AI for climate resilience and farmer advisory systems',
     status: 'Ongoing',

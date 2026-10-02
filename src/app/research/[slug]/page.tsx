@@ -26,13 +26,13 @@ export async function generateMetadata({
 
   if (!researchArea) {
     return {
-      title: 'Research Area - MCAAI',
+      title: 'Research Area MCAAI',
       description: 'Discover research areas at MCAAI.',
     };
   }
 
   return {
-    title: `${researchArea.title} - MCAAI Research`,
+    title: `${researchArea.title} MCAAI Research`,
     description: researchArea.summary,
   };
 }

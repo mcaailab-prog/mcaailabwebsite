@@ -11,7 +11,8 @@ export type FieldType =
   | 'links'
   | 'users'
   | 'objectives'
-  | 'pairs';
+  | 'pairs'
+  | 'password';
 
 export type AdminField = {
   name: string;
@@ -130,6 +131,33 @@ export const adminResources: Record<string, AdminResource> = {
       { name: 'full_description', label: 'Full description', type: 'textarea', required: true },
       { name: 'status', label: 'Status', type: 'text' },
       { name: 'cover_image', label: 'Cover image', type: 'image' },
+      { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
+  partners: {
+    key: 'partners',
+    title: 'Partners',
+    singular: 'Partner',
+    api: '/api/partners',
+    titleField: 'name',
+    subtitleField: 'partner_type',
+    fields: [
+      { name: 'name', label: 'Partner name', type: 'text', required: true },
+      { name: 'logo', label: 'Logo URL', type: 'image' },
+      { name: 'website', label: 'Website URL', type: 'text' },
+      { name: 'description', label: 'Description', type: 'textarea', required: true },
+      {
+        name: 'partner_type',
+        label: 'Partner type',
+        type: 'select',
+        required: true,
+        defaultValue: 'research',
+        options: [
+          { value: 'research', label: 'Research' },
+          { value: 'funding', label: 'Funding' },
+          { value: 'community', label: 'Community' },
+        ],
+      },
       { name: 'order', label: 'Display order', type: 'number' },
     ],
   },
@@ -260,6 +288,24 @@ export const adminResources: Record<string, AdminResource> = {
       { name: 'window_close', label: 'Application window closes', type: 'datetime' },
       { name: 'is_accepting', label: 'Currently accepting applications', type: 'checkbox' },
       { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
+  adminUsers: {
+    key: 'admin-users',
+    title: 'Admins',
+    singular: 'Admin',
+    api: '/api/admin-users',
+    titleField: 'name',
+    subtitleField: 'email',
+    fields: [
+      { name: 'name', label: 'Full name', type: 'text', required: true },
+      { name: 'email', label: 'Email', type: 'text', required: true, hint: 'Used to sign in to this admin panel' },
+      {
+        name: 'password',
+        label: 'Password',
+        type: 'password',
+        hint: 'Required when creating a new admin. Leave blank when editing to keep the current password.',
+      },
     ],
   },
 };

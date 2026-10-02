@@ -12,11 +12,13 @@ const NAV = [
   { href: '/admin/team', label: 'Team' },
   { href: '/admin/projects', label: 'Projects' },
   { href: '/admin/research', label: 'Research areas' },
+  { href: '/admin/partners', label: 'Partners' },
   { href: '/admin/collaborations', label: 'Collaborations' },
   { href: '/admin/innovations', label: 'Innovations' },
   { href: '/admin/datasets', label: 'Datasets' },
   { href: '/admin/careers', label: 'Career tracks' },
   { href: '/admin/inbox', label: 'Inbox' },
+  { href: '/admin/admin-users', label: 'Admins' },
 ];
 
 export default function AdminFrame({ children }: { children: React.ReactNode }) {

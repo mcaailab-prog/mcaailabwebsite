@@ -4,7 +4,7 @@ import type { PartnerType as Partner } from '@/lib/api-types';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'Partners - MCAAI',
+  title: 'Partners MCAAI',
   description: 'Meet our research, funding, and community partners at the Maseno Centre for Applied Artificial Intelligence.',
 };
 

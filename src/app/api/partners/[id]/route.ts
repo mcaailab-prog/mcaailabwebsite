@@ -53,7 +53,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       return NextResponse.json({ error: 'Partner not found' }, { status: 404 });
     }
 
-    await partner.populate('associated_project');
     return NextResponse.json(JSON.parse(JSON.stringify(partner)));
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';

@@ -5,7 +5,7 @@ import CareerApplicationForm from '@/components/forms/CareerApplicationForm';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Careers - MCAAI',
+  title: 'Careers MCAAI',
   description: 'Explore opportunities to join MCAAI and help build applied AI for social and institutional impact.',
 };
 

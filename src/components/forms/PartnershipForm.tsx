@@ -35,7 +35,7 @@ export default function PartnershipForm() {
       const payload = {
         name: formData.name,
         email: formData.email,
-        subject: `Partnership Inquiry - ${formData.areaOfInterest}`,
+        subject: `Partnership Inquiry ${formData.areaOfInterest}`,
         message: `Organization: ${formData.organization}\nArea of Interest: ${formData.areaOfInterest}\n\n${formData.message}`,
       };
 

@@ -4,8 +4,8 @@ import SiteChrome from "@/components/layout/SiteChrome";
 import PerformanceGuardClient from '@/components/PerformanceGuardClient';
 
 export const metadata: Metadata = {
-  title: "MCAAI - Maseno  Center for Applied Artificial intelligence",
-  description: "Harnessing AI for community-driven innovations. Positioning Maseno University at the forefront of AI research in Africa.",
+  title: 'MCAAI Maseno Center for Applied Artificial Intelligence',
+  description: 'Harnessing AI for community-driven innovations. Positioning Maseno University at the forefront of AI research in Africa.',
 };
 
 // Content pages read directly from MongoDB (not via fetch()), and the

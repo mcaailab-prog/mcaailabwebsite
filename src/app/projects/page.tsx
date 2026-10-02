@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Projects - MCAAI',
+  title: 'Projects MCAAI',
   description: 'A landing page for the eight flagship MCAAI project portfolios spanning language technology, inclusion, and AI for social impact.',
 };
 

@@ -9,7 +9,7 @@ import { FiLock, FiUnlock, FiDatabase, FiArrowRight, FiExternalLink } from 'reac
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Datasets - MCAAI',
+  title: 'Datasets MCAAI',
   description: 'Explore the datasets stewarded by the Maseno Centre for Applied Artificial Intelligence.',
 };
 

@@ -85,7 +85,7 @@ const researchWorkProjects = [
 ];
 
 export const metadata = {
-  title: 'Our research works - MCAAI',
+  title: 'Our research works MCAAI',
   description: 'Explore the flagship research projects and applied AI programmes driving MCAAI’s work for language access, inclusion and data justice.',
 };
 
