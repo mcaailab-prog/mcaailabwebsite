@@ -133,6 +133,33 @@ export const adminResources: Record<string, AdminResource> = {
       { name: 'order', label: 'Display order', type: 'number' },
     ],
   },
+  partners: {
+    key: 'partners',
+    title: 'Partners',
+    singular: 'Partner',
+    api: '/api/partners',
+    titleField: 'name',
+    subtitleField: 'partner_type',
+    fields: [
+      { name: 'name', label: 'Partner name', type: 'text', required: true },
+      { name: 'logo', label: 'Logo URL', type: 'image' },
+      { name: 'website', label: 'Website URL', type: 'text' },
+      { name: 'description', label: 'Description', type: 'textarea', required: true },
+      {
+        name: 'partner_type',
+        label: 'Partner type',
+        type: 'select',
+        required: true,
+        defaultValue: 'research',
+        options: [
+          { value: 'research', label: 'Research' },
+          { value: 'funding', label: 'Funding' },
+          { value: 'community', label: 'Community' },
+        ],
+      },
+      { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
   collaborations: {
     key: 'collaborations',
     title: 'Collaborations',

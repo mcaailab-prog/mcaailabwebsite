@@ -12,6 +12,7 @@ const NAV = [
   { href: '/admin/team', label: 'Team' },
   { href: '/admin/projects', label: 'Projects' },
   { href: '/admin/research', label: 'Research areas' },
+  { href: '/admin/partners', label: 'Partners' },
   { href: '/admin/collaborations', label: 'Collaborations' },
   { href: '/admin/innovations', label: 'Innovations' },
   { href: '/admin/datasets', label: 'Datasets' },

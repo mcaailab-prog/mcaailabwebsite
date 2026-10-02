@@ -25,13 +25,13 @@ export async function generateMetadata({
 
   if (!dataset) {
     return {
-      title: 'Dataset Not Found - MCAAI',
+      title: 'Dataset Not Found MCAAI',
       description: 'The requested dataset could not be found.',
     };
   }
 
   return {
-    title: `${dataset.name} - MCAAI Datasets`,
+    title: `${dataset.name} MCAAI Datasets`,
     description: dataset.description?.slice(0, 160) ?? 'Learn about our datasets and how to access them.',
   };
 }

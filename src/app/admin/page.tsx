@@ -6,6 +6,7 @@ const cards = [
   { href: '/admin/team', title: 'Team members', body: 'Add, edit, and remove people shown on the public team pages.' },
   { href: '/admin/projects', title: 'Projects', body: 'Edit the project registry, members, funders, and links.' },
   { href: '/admin/research', title: 'Research areas', body: 'Add lab programmes such as MT, ASR, synthetic data, AI4KSL, and systems.' },
+  { href: '/admin/partners', title: 'Partners', body: 'Manage the global institutional partners shown across the site and partner pages.' },
   { href: '/admin/collaborations', title: 'Collaborations', body: 'Add partner pages (Princeton, Microsoft, DSA, ACTS, Google, and more).' },
   { href: '/admin/innovations', title: 'Innovations', body: 'Document lab tools and access links.' },
   { href: '/admin/datasets', title: 'Datasets', body: 'Set Hugging Face, GitHub, or other download URLs for public dataset pages.' },

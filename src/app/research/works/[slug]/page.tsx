@@ -228,13 +228,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!project) {
     return {
-      title: 'Project not found - MCAAI',
+      title: 'Project not found MCAAI',
       description: 'The requested research project could not be found.',
     };
   }
 
   return {
-    title: `${project.title} - MCAAI`,
+    title: `${project.title} MCAAI`,
     description: project.description,
   };
 }

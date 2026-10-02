@@ -49,7 +49,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const partner = new Partner(body);
     await partner.save();
-    await partner.populate('associated_project');
     return NextResponse.json(JSON.parse(JSON.stringify(partner)), { status: 201 });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';

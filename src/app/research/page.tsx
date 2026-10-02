@@ -6,7 +6,7 @@ import { MdScience, MdDescription, MdSchool } from 'react-icons/md';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Research Work - MCAAI',
+  title: 'Research Work MCAAI',
   description: 'Explore the research focus areas of the Maseno Centre for Applied Artificial Intelligence.',
 };
 

@@ -5,7 +5,7 @@ import { isLabTeamMember } from '@/lib/team';
 import TeamPageClient from './TeamPageClient';
 
 export const metadata: Metadata = {
-  title: 'Our Team - MCAAI',
+  title: 'Our Team MCAAI',
   description:
     'Meet the researchers, faculty, and staff driving innovation at the Maseno Centre for Applied Artificial Intelligence.',
 };
