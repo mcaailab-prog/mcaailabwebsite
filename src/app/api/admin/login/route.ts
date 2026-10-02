@@ -14,9 +14,9 @@ function cookieOptions() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const email = String(body.email || '');
+    const email = String(body.email || '').trim();
     const password = String(body.password || '');
-    const user = findAdminUser(email, password);
+    const user = await findAdminUser(email, password);
 
     if (!user) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });

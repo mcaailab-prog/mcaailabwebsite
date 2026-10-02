@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { PublicationType } from '@/lib/api';
 import RichTextRenderer from '@/components/ui/RichTextRenderer';
+import { isValidNewsletterEmail, normalizeNewsletterEmail } from '@/lib/newsletter';
 import {
   FiSearch, FiX, FiExternalLink, FiDownload,
   FiMessageSquare, FiLock, FiEye, FiArrowRight,
@@ -135,12 +136,15 @@ export default function PublicationsClient({
   publications: PublicationType[];
 }) {
   const [allPublications] = useState<PublicationType[]>(initialPublications);
-  const [search,         setSearch]         = useState('');
+  const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
-  const [activeYear,     setActiveYear]     = useState('');
-  const [activeType,     setActiveType]     = useState('');
-  const [sortBy,         setSortBy]         = useState('newest');
-  const [page,           setPage]           = useState(1);
+  const [activeYear, setActiveYear] = useState('');
+  const [activeType, setActiveType] = useState('');
+  const [sortBy, setSortBy] = useState('newest');
+  const [page, setPage] = useState(1);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [newsletterMessage, setNewsletterMessage] = useState('');
 
   const categories = useMemo(() => {
     const set = new Set(
@@ -432,19 +436,69 @@ export default function PublicationsClient({
             Subscribe to our newsletter for updates on new publications, research breakthroughs,
             and upcoming events from MCAAI.
           </p>
-          <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex flex-col sm:flex-row gap-4">
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              className="flex-1 border border-outline-variant/50 rounded px-4 py-2 bg-background text-on-surface placeholder:text-outline-variant/60 focus:outline-none focus:border-primary focus:border-2"
-            />
-            <button
-              type="button"
-              className="px-6 py-2 bg-primary text-on-primary font-semibold rounded hover:bg-primary/90 transition-colors"
+
+          {newsletterStatus === 'success' ? (
+            <p className="bg-mcaai-green/10 text-mcaai-green border border-mcaai-green/30 rounded-lg px-4 py-3 text-sm font-medium">
+              ✓ {newsletterMessage || 'You are subscribed.'}
+            </p>
+          ) : (
+            <form
+              onSubmit={async (event) => {
+                event.preventDefault();
+                const value = normalizeNewsletterEmail(newsletterEmail);
+                if (!isValidNewsletterEmail(value)) {
+                  setNewsletterStatus('error');
+                  setNewsletterMessage('Please enter a valid email address.');
+                  return;
+                }
+
+                setNewsletterStatus('loading');
+                setNewsletterMessage('');
+
+                try {
+                  const res = await fetch('/api/newsletter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: value, source: 'publications-page' }),
+                  });
+
+                  const data = await res.json().catch(() => ({}));
+                  if (!res.ok) {
+                    throw new Error(data?.error || 'Subscription failed');
+                  }
+
+                  setNewsletterStatus('success');
+                  setNewsletterMessage(data?.message || 'You are subscribed.');
+                  setNewsletterEmail('');
+                } catch (error) {
+                  setNewsletterStatus('error');
+                  setNewsletterMessage(error instanceof Error ? error.message : 'Something went wrong.');
+                }
+              }}
+              className="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex flex-col sm:flex-row gap-4"
             >
-              Subscribe
-            </button>
-          </div>
+              <input
+                type="email"
+                value={newsletterEmail}
+                onChange={(event) => setNewsletterEmail(event.target.value)}
+                placeholder="Enter your email address"
+                required
+                className="flex-1 border border-outline-variant/50 rounded px-4 py-2 bg-background text-on-surface placeholder:text-outline-variant/60 focus:outline-none focus:border-primary focus:border-2"
+              />
+              <button
+                type="submit"
+                disabled={newsletterStatus === 'loading'}
+                className="px-6 py-2 bg-primary text-on-primary font-semibold rounded hover:bg-primary/90 transition-colors disabled:opacity-60"
+              >
+                {newsletterStatus === 'loading' ? 'Subscribing...' : 'Subscribe'}
+              </button>
+            </form>
+          )}
+
+          {newsletterStatus === 'error' && (
+            <p className="mt-4 text-sm text-error">{newsletterMessage || 'Something went wrong.'}</p>
+          )}
+
           <p className="mt-4 text-xs text-outline-variant">
             We respect your privacy. Unsubscribe at any time.
           </p>

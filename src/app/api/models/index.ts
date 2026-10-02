@@ -20,6 +20,9 @@ import './Collaboration';
 import './Innovation';
 import './CareerTrack';
 import './CareerApplication';
+import './NewsletterSubscriber';
+import './AdminUser';
+import './AdminConfig';
 
 export { ResearchArea } from './ResearchArea';
 export { TeamMember } from './TeamMember';
@@ -38,3 +41,6 @@ export { Collaboration } from './Collaboration';
 export { Innovation } from './Innovation';
 export { CareerTrack } from './CareerTrack';
 export { CareerApplication } from './CareerApplication';
+export { NewsletterSubscriber } from './NewsletterSubscriber';
+export { AdminUser } from './AdminUser';
+export { AdminConfig } from './AdminConfig';
