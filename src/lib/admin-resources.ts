@@ -11,7 +11,8 @@ export type FieldType =
   | 'links'
   | 'users'
   | 'objectives'
-  | 'pairs';
+  | 'pairs'
+  | 'password';
 
 export type AdminField = {
   name: string;
@@ -287,6 +288,24 @@ export const adminResources: Record<string, AdminResource> = {
       { name: 'window_close', label: 'Application window closes', type: 'datetime' },
       { name: 'is_accepting', label: 'Currently accepting applications', type: 'checkbox' },
       { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
+  adminUsers: {
+    key: 'admin-users',
+    title: 'Admins',
+    singular: 'Admin',
+    api: '/api/admin-users',
+    titleField: 'name',
+    subtitleField: 'email',
+    fields: [
+      { name: 'name', label: 'Full name', type: 'text', required: true },
+      { name: 'email', label: 'Email', type: 'text', required: true, hint: 'Used to sign in to this admin panel' },
+      {
+        name: 'password',
+        label: 'Password',
+        type: 'password',
+        hint: 'Required when creating a new admin. Leave blank when editing to keep the current password.',
+      },
     ],
   },
 };
