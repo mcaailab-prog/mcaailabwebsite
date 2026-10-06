@@ -49,7 +49,7 @@ async function hmacKey(secret: string) {
   );
 }
 
-async function hashPassword(value: string) {
+export async function hashPassword(value: string) {
   const hash = await crypto.subtle.digest('SHA-256', encoder.encode(value));
   return Array.from(new Uint8Array(hash))
     .map((byte) => byte.toString(16).padStart(2, '0'))
