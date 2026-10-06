@@ -58,7 +58,7 @@ export const importProjects = [
     member_names: ['Dr. Lilian Wanzare', 'Jerry John Kponyo', 'Maseno University team', 'Kwame Nkrumah University of Science and Technology partners'],
     funder_names: ['IDRC', 'AI4D Funders Collaborative', 'FCDO', 'Sida', 'Community Jameel'],
     links: [
-      { label: 'HAIDI platform', href: 'https://addn-haidi.vercel.app/' },
+      { label: 'HAIDI platform', href: 'https://tourmaline-rolypoly-f9598c.netlify.app/' },
       { label: 'IDRC Project Page', href: 'https://idrc-crdi.ca/en/what-we-do/projects-we-support/project/ai4d-hub-ai-and-disability-inclusion' },
       { label: 'AI4D Project Page', href: 'https://www.ai4d.ai/projects/hub-for-ai-and-disability-inclusion' },
       { label: 'Project Website', href: 'https://haidiai4d.org/' },
@@ -283,7 +283,7 @@ export const importCollaboration = {
   cta_body:
     'Whether you are a disability-inclusive AI venture seeking funding, a researcher interested in the evidence base programme, or an institution looking to embed accessibility into AI governance — there is a role for you in HAIDI.',
   links: [
-    { label: 'HAIDI platform', href: 'https://addn-haidi.vercel.app/' },
+    { label: 'HAIDI platform', href: 'https://tourmaline-rolypoly-f9598c.netlify.app/' },
     { label: 'View AI4KSL Project', href: '/projects/ai4ksl-bridging-language-barrier-using-ai-for-kenyan-sign-language' },
   ],
   related_project_slug: 'ai4ksl-bridging-language-barrier-using-ai-for-kenyan-sign-language',

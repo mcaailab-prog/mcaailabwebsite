@@ -3,22 +3,39 @@ import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { QuarterlyReportType } from '@/lib/api-types';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } = params;
-  const all = await api.getQuarterlyReports();
-  const rpt = all.find((r: QuarterlyReportType) => r.slug === slug);
-  if (!rpt) return { title: 'Report not found — MCAAI' };
-  return { title: `${rpt.title} — MCAAI`, description: rpt.summary ?? '' };
+  try {
+    const all = await api.getQuarterlyReports();
+    const rpt = all.find((r: QuarterlyReportType) => r.slug === slug);
+    if (!rpt) return { title: 'Report not found — MCAAI' };
+    return { title: `${rpt.title} — MCAAI`, description: rpt.summary ?? '' };
+  } catch {
+    return { title: 'Quarterly report — MCAAI' };
+  }
 }
 
 export async function generateStaticParams() {
-  const reports = await api.getQuarterlyReports();
-  return reports.map((report) => ({ slug: report.slug }));
+  try {
+    const reports = await api.getQuarterlyReports();
+    return reports.map((report) => ({ slug: report.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export default async function ReportDetail({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const all = await api.getQuarterlyReports();
+  let all: QuarterlyReportType[] = [];
+
+  try {
+    all = await api.getQuarterlyReports();
+  } catch {
+    all = [];
+  }
+
   const rpt = all.find((r: QuarterlyReportType) => r.slug === slug);
   if (!rpt) notFound();
 
