@@ -67,7 +67,7 @@ const researchWorkProjects: {
     members: ['Dr. Lilian Wanzare', 'Jerry John Kponyo', 'Maseno University team', 'Kwame Nkrumah University of Science and Technology partners'],
     funders: ['IDRC', 'AI4D Funders Collaborative', 'FCDO', 'Sida', 'Community Jameel'],
     links: [
-      { label: 'HAIDI platform', href: 'https://addn-haidi.vercel.app/' },
+      { label: 'HAIDI platform', href: 'https://tourmaline-rolypoly-f9598c.netlify.app/' },
       { label: 'IDRC Project Page', href: 'https://idrc-crdi.ca/en/what-we-do/projects-we-support/project/ai4d-hub-ai-and-disability-inclusion' },
       { label: 'AI4D Project Page', href: 'https://www.ai4d.ai/projects/hub-for-ai-and-disability-inclusion' },
       { label: 'Project Website', href: 'https://haidiai4d.org/' }
