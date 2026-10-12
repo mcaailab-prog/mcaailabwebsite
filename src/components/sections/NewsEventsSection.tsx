@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { FaNewspaper, FaCalendarAlt, FaTrophy, FaArrowRight } from 'react-icons/fa';
 import type { PostType } from '@/lib/api-types';
@@ -40,8 +41,8 @@ export default function NewsEventsSection({ posts = [] }: { posts?: PostType[] }
             >
               {/* Cover image */}
               {post.cover_image && (
-                <div className="aspect-video overflow-hidden bg-surface-container">
-                  <img src={post.cover_image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="relative aspect-video overflow-hidden bg-surface-container">
+                  <Image src={post.cover_image} alt={post.title} fill sizes="(max-width: 768px) 100vw, 33vw" unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
               )}
 

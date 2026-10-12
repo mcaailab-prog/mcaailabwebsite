@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { api } from '@/lib/api';
 import Link from 'next/link';
 import { FiArrowRight, FiArrowUpRight } from 'react-icons/fi';
@@ -62,10 +63,13 @@ export default async function AboutPage() {
           HERO
       ══════════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden flex">
-        <img
+        <Image
           src="/about.jpg"
           alt="MCAAI team at Maseno University"
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          fill
+          sizes="100vw"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+          priority
         />
         <div
           className="absolute inset-0"
@@ -319,11 +323,14 @@ export default async function AboutPage() {
                   />
 
                   {post.cover_image && (
-                    <div className="h-40 overflow-hidden">
-                      <img
+                    <div className="relative h-40 overflow-hidden">
+                      <Image
                         src={post.cover_image}
                         alt={post.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        unoptimized
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>
                   )}

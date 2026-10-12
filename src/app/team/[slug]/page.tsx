@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { api } from '@/lib/api';
@@ -51,11 +52,12 @@ function injectLeadImageIntoBio(bio: string | null | undefined, photo: string | 
   const safePhoto = photo.replace(/"/g, '&quot;');
   const imageMarkup = `
     <div class="mb-4 overflow-hidden sm:float-right sm:ml-6 sm:max-w-[220px] sm:w-[38%]">
-      <img
-        src="${safePhoto}"
-        alt="${safeName}"
-        class="w-full h-auto rounded-2xl border border-[#bec8cb]/40 object-cover shadow-sm"
-      />
+      <div
+        class="h-auto w-full rounded-2xl border border-[#bec8cb]/40 bg-cover bg-center shadow-sm"
+        style="background-image: url('${safePhoto}'); min-height: 220px;"
+        aria-label="${safeName}"
+        role="img"
+      ></div>
     </div>
   `;
 
@@ -135,10 +137,14 @@ export default async function TeamMemberProfilePage({
 
         {/* ── Photo / fallback ─────────────────────────────────────────── */}
         {hasPhoto ? (
-          <img
+          <Image
             src={member.photo ?? ''}
             alt={member.name}
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            fill
+            sizes="100vw"
+            priority
+            className="absolute inset-0 h-full w-full object-cover object-top"
+            unoptimized
           />
         ) : (
           /* Fallback: deep-blue with node-graph texture */

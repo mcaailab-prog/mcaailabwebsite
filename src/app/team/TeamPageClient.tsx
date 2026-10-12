@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import { useState, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import type { TeamMemberType } from '@/lib/api-types';
@@ -491,12 +492,15 @@ function LeaderCard({ member }: { member: TeamMemberType }) {
       <div className="h-1 w-full bg-[#003399] group-hover:bg-[#72C6D5] transition-colors duration-300" />
 
       {/* Photo */}
-      <div className="relative h-44 sm:h-52 bg-[#ebeeef] overflow-hidden">
+      <div className="relative h-44 overflow-hidden bg-[#ebeeef] sm:h-52">
         {member.photo ? (
-          <img
+          <Image
             src={member.photo}
             alt={member.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 100vw, 25vw"
+            unoptimized
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -572,9 +576,9 @@ function AssociateCard({ member }: { member: TeamMemberType }) {
   return (
     <div className="group bg-white border border-[#bec8cb]/40 rounded-xl p-4 sm:p-5 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 h-full flex flex-col">
       <div className="flex items-center gap-3 mb-3 sm:mb-4">
-        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#ebeeef] flex items-center justify-center shrink-0 overflow-hidden">
+        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-[#ebeeef] sm:h-11 sm:w-11">
           {member.photo ? (
-            <img src={member.photo} alt={member.name} className="w-full h-full object-cover" />
+            <Image src={member.photo} alt={member.name} fill sizes="44px" unoptimized className="object-cover" />
           ) : (
             <FiUser size={20} className="text-[#bec8cb]" />
           )}

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { api } from '@/lib/api';
@@ -132,11 +133,16 @@ export default async function ResearchAreaDetailPage({
             {/* Research Area Image */}
             <div className="relative">
               {researchArea.cover_image ? (
-                <img
-                  src={researchArea.cover_image}
-                  alt={`${researchArea.title} cover`}
-                  className="rounded-lg shadow-lg object-cover w-full h-[400px]"
-                />
+                <div className="relative h-[400px] w-full overflow-hidden rounded-lg shadow-lg">
+                  <Image
+                    src={researchArea.cover_image}
+                    alt={`${researchArea.title} cover`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    unoptimized
+                    className="object-cover"
+                  />
+                </div>
               ) : (
                 <div className="w-full h-[400px] bg-[#65C1CF]/20 rounded-lg flex items-center justify-center">
                   <span className="text-5xl text-[#65C1CF]/50">🔬</span>

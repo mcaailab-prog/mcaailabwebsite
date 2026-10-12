@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { FiMic, FiVideo, FiGlobe } from 'react-icons/fi';
 import { FaArrowRight } from 'react-icons/fa';
@@ -133,10 +134,13 @@ export default async function Home() {
             </div>
 
             <div className="lg:w-1/2 relative min-h-[400px] bg-mcaai-teal/20 flex items-center justify-center">
-              <img
+              <Image
                 src="https://res.cloudinary.com/daecietav/image/upload/v1753200174/research_dgtrss.jpg"
                 alt="AI4KSL initiative"
-                className="absolute inset-0 w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                unoptimized
+                className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
 
