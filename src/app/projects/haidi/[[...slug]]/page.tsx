@@ -1,11 +1,16 @@
 'use client';
 
+import type { ComponentType } from 'react';
 import dynamic from 'next/dynamic';
+
+type AddnAppProps = {
+  onBack?: () => void;
+};
 
 const AddnApp = dynamic(
   async () => {
-    const module = await import('../../../addn-haidi/src/App');
-    return module.default as any;
+    const appModule = await import('../../../addn-haidi/src/App');
+    return appModule.default as ComponentType<AddnAppProps>;
   },
   {
     ssr: false,
