@@ -42,7 +42,7 @@ export default async function ProjectsPage() {
 
         <div>
           <Link
-            href="https://tourmaline-rolypoly-f9598c.netlify.app/"
+            href="/projects/haidi"
             className="group relative -ml-6 mb-2 flex flex-col gap-5 border-t border-outline-variant py-8 pl-6 transition-colors duration-300 last:border-b hover:bg-university-deep-blue/[0.04] md:flex-row md:items-center md:gap-8 md:py-9"
           >
             <span className="absolute left-0 top-0 h-full w-[3px] origin-top scale-y-0 bg-university-deep-blue transition-transform duration-300 group-hover:scale-y-100" />

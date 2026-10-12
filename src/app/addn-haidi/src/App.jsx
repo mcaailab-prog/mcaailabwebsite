@@ -441,7 +441,7 @@ function SummaryTable({ datasets, ventures, orgs, publications }) {
   );
 }
 
-export default function App({ onBack }) {
+export default function App({ onBack } = {}) {
   const [activeTab, setActiveTab] = useState("map");
   const [selectedRegion, setSelectedRegion] = useState("All Africa");
   const [search, setSearch] = useState("");
