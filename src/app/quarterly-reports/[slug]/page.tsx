@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { QuarterlyReportType } from '@/lib/api-types';
@@ -42,11 +43,14 @@ export default async function ReportDetail({ params }: { params: { slug: string 
   return (
     <div className="max-w-4xl mx-auto px-margin-mobile md:px-8 py-12">
       {rpt.cover_image ? (
-        <div className="mb-8 overflow-hidden rounded-3xl shadow-sm">
-          <img
+        <div className="relative mb-8 h-[360px] overflow-hidden rounded-3xl shadow-sm">
+          <Image
             src={rpt.cover_image}
             alt={rpt.title}
-            className="w-full h-[360px] object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 80vw"
+            unoptimized
+            className="object-cover"
           />
         </div>
       ) : null}

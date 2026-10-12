@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FaArrowLeft, FaNewspaper, FaCalendarAlt, FaTrophy, FaUser, FaClock } from 'react-icons/fa';
@@ -77,10 +78,13 @@ export default async function NewsDetailPage({
         {/* Cover image or gradient fallback */}
         {post.cover_image ? (
           <div className="absolute inset-0">
-            <img
+            <Image
               src={post.cover_image}
               alt={post.title}
-              className="w-full h-full object-cover opacity-30"
+              fill
+              sizes="100vw"
+              unoptimized
+              className="object-cover opacity-30"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-university-deep-blue/60 via-university-deep-blue/80 to-university-deep-blue" />
           </div>
@@ -239,11 +243,14 @@ export default async function NewsDetailPage({
                   className="group bg-white rounded-xl border border-outline-variant/40 overflow-hidden hover:border-mcaai-teal hover:shadow-md transition-all duration-200"
                 >
                   {p.cover_image && (
-                    <div className="aspect-video overflow-hidden">
-                      <img
+                    <div className="relative aspect-video overflow-hidden">
+                      <Image
                         src={p.cover_image}
                         alt={p.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        unoptimized
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
                   )}

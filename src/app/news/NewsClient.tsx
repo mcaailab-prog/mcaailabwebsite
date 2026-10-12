@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { FaNewspaper, FaCalendarAlt, FaTrophy, FaArrowRight, FaSearch } from 'react-icons/fa';
@@ -31,10 +32,13 @@ function FeaturedCard({ post }: { post: PostType }) {
     >
       <div className="lg:w-1/2 aspect-video lg:aspect-auto min-h-[260px] bg-surface-container overflow-hidden relative">
         {post.cover_image ? (
-          <img
+          <Image
             src={post.cover_image}
             alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            unoptimized
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-university-deep-blue to-mcaai-teal flex items-center justify-center">
@@ -90,10 +94,13 @@ function PostCard({ post }: { post: PostType }) {
     >
       <div className="aspect-video overflow-hidden bg-surface-container relative">
         {post.cover_image ? (
-          <img
+          <Image
             src={post.cover_image}
             alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            unoptimized
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-university-deep-blue/80 to-mcaai-teal/60 flex items-center justify-center">

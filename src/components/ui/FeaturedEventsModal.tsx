@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { FiX, FiExternalLink } from 'react-icons/fi';
 import type { EventType } from '@/lib/api-types';
@@ -87,11 +88,14 @@ export default function FeaturedEventsModal({ events }: { events: EventType[] })
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-[28px] bg-slate-100 shadow-sm">
+          <div className="relative overflow-hidden rounded-[28px] bg-slate-100 shadow-sm">
             {selectedEvent.cover_image ? (
-              <img
+              <Image
                 src={selectedEvent.cover_image}
                 alt={selectedEvent.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                unoptimized
                 className="h-full w-full object-cover"
               />
             ) : (
