@@ -3,7 +3,13 @@
 import Link from 'next/link';
 import type { QuarterlyReportType } from '@/lib/api-types';
 
-export default function ReportsClient({ reports = [] }: { reports?: QuarterlyReportType[] }) {
+export default function ReportsClient({
+  reports = [],
+  basePath = '/quarterly-reports',
+}: {
+  reports?: QuarterlyReportType[];
+  basePath?: string;
+}) {
   const grouped: Record<number, QuarterlyReportType[]> = {};
   for (const r of reports) {
     grouped[r.year] = grouped[r.year] || [];
@@ -20,7 +26,7 @@ export default function ReportsClient({ reports = [] }: { reports?: QuarterlyRep
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {grouped[Number(year)].map((r) => (
               <article key={r.id} className="p-4 border rounded-lg">
-                <h3 className="font-semibold"><Link href={`/quarterly-reports/${r.slug}`}>{r.title}</Link></h3>
+                <h3 className="font-semibold"><Link href={`${basePath}/${r.slug}`}>{r.title}</Link></h3>
                 <p className="text-sm text-on-surface-variant">Q{r.quarter}</p>
                 <p className="mt-2 text-sm">{r.summary}</p>
               </article>

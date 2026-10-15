@@ -132,8 +132,14 @@ function PublicationItem({ pub }: { pub: PublicationType }) {
 
 export default function PublicationsClient({
   publications: initialPublications,
+  title = 'Scientific Publications',
+  description = 'Explore our repository of peer-reviewed articles, conference papers, and technical reports driving innovation in Applied AI, Natural Language Processing, and Ethical Technology within the East African context.',
+  showBreadcrumb = true,
 }: {
   publications: PublicationType[];
+  title?: string;
+  description?: string;
+  showBreadcrumb?: boolean;
 }) {
   const [allPublications] = useState<PublicationType[]>(initialPublications);
   const [search, setSearch] = useState('');
@@ -205,21 +211,21 @@ export default function PublicationsClient({
 
       {/* ── hero header ── */}
       <section className="pt-10 pb-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-        <nav className="text-[12px] text-outline mb-6 flex items-center gap-1.5">
-          <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-          <span>/</span>
-          <Link href="/research" className="hover:text-primary transition-colors">Research</Link>
-          <span>/</span>
-          <span className="text-on-surface">Publications</span>
-        </nav>
+        {showBreadcrumb && (
+          <nav className="text-[12px] text-outline mb-6 flex items-center gap-1.5">
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+            <span>/</span>
+            <Link href="/research" className="hover:text-primary transition-colors">Research</Link>
+            <span>/</span>
+            <span className="text-on-surface">Publications</span>
+          </nav>
+        )}
 
         <h1 className="font-display-xl text-headline-lg md:text-display-xl text-primary font-bold mb-6">
-          Scientific Publications
+          {title}
         </h1>
         <p className="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mb-8">
-          Explore our repository of peer-reviewed articles, conference papers, and technical
-          reports driving innovation in Applied AI, Natural Language Processing, and Ethical
-          Technology within the East African context.
+          {description}
         </p>
 
         {/* search bar */}
