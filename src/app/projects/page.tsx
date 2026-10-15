@@ -1,8 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { MdArrowForward, MdFolderOpen } from 'react-icons/md';
 import { api } from '@/lib/api';
-import haidiLogo from '../addn-haidi/src/assets/images/Sec_White.png';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,14 +45,8 @@ export default async function ProjectsPage() {
           >
             <span className="absolute left-0 top-0 h-full w-[3px] origin-top scale-y-0 bg-university-deep-blue transition-transform duration-300 group-hover:scale-y-100" />
 
-            <div className="relative h-40 w-full shrink-0 overflow-hidden bg-[#0f0f10] md:h-24 md:w-32">
-              <Image
-                src={haidiLogo}
-                alt="HAIDI logo"
-                fill
-                className="object-contain p-2"
-                sizes="(max-width: 768px) 100vw, 128px"
-              />
+            <div className="relative flex h-40 w-full shrink-0 items-center justify-center overflow-hidden bg-[#0f0f10] md:h-24 md:w-32">
+              <span className="font-display text-2xl font-bold tracking-[0.16em] text-white">ADDN</span>
               <span className="absolute bottom-2 left-2 rounded bg-[#ef4444]/90 px-2 py-1 text-[11px] leading-none text-white backdrop-blur-sm">
                 Live
               </span>
