@@ -14,6 +14,7 @@ const IMG = {
   sponsorFunders: "/haidi/Asset-179.png",
   ld: "/haidi/ld.jpg",
   bernard: "/haidi/Bernard_Chira.jpg",
+  jerry: "/haidi/PROF-JJ.jpg",
   chris: "/haidi/chris-hrsn.png",
 };
 
@@ -52,9 +53,10 @@ const PARTNERS = [
 ];
 
 const PRINCIPALS = [
-  { img: IMG.ld, imgClass: "", name: "Dr. Lilian Wanzare", role: "Lead Principal Investigator - MCAAI", bio: "Placeholder biography content for L. D. covering their research focus, leadership role, and connection to disability-inclusive AI in Africa." },
-  { img: IMG.bernard, imgClass: "offset-down", name: "Bernard Chiira", role: "Principal Investigator - AT4D", bio: "Placeholder biography content for Bernard Chira describing experience in applied AI research, disability inclusion, and dataset collaboration." },
-  { img: IMG.chris, imgClass: "offset-down-chris", name: "Chris Harrison", role: "Principal Investigator - NSF", bio: "Placeholder biography content for Chris Hrsn outlining their expertise in inclusive data practices and partner engagement across the ADDN network." },
+  { img: IMG.ld, imgClass: "", name: "Dr. Lilian Wanzare", role: "Lead Principal Investigator - MCAAI", bio: "Dr. Lilian Wanzare is a Lecturer and Chair of the Department of Computer Science at Maseno University and Research Lead at the Maseno Centre for Applied Artificial Intelligence (MCAAI). Her research focuses on Artificial Intelligence (AI), Machine Learning, and Natural Language Processing (NLP), with particular emphasis on developing language technologies for underserved African languages and applying AI to challenges in agriculture, education, and health. She leads research initiatives advancing Kenyan Sign Language (KSL) technologies, inclusive AI, and the development of locally relevant language datasets and models. Through these initiatives, she contributes to strengthening disability-inclusive AI research, multidisciplinary collaboration, community engagement, and AI capacity development across Africa. Dr. Wanzare has served as Principal Investigator on several research projects supported by the Gates Foundation, the International Development Research Centre (IDRC), and the Artificial Intelligence for Development (AI4D) programme. Her work promotes African-led AI innovation, equitable access to language technologies, and the translation of research into practical solutions with meaningful societal impact." },
+  { img: IMG.bernard, imgClass: "offset-down", name: "Bernard Chiira", role: "Principal Investigator - AT4D", bio: "Bernard Chiira is a globally recognized leader, investor and advisor in digital accessibility, inclusive technology ecosystems, assistive tech innovation, and disability-inclusive AI. As the CEO of AT4D and co-founder of Innovate Now, he has shaped Africa’s most impactful disability innovation ecosystem. Bernard brings nearly two decades of experience in startup innovation ecosystem development, digital accessibility, public-private partnerships, inclusive policy influence, and startup venture support. He is a trusted voice at high-level forums and think tanks including Wilton Park, Africa AI Summit, British Council Going Global, and the Equitable AI Alliance." },
+  { img: IMG.jerry, imgClass: "offset-down-chris", name: "Jerry John Kponyo", role: "Principal Investigator - RAIL", bio: "Prof. Jerry John Kponyo is the Principal Investigator of the Responsible AI Lab II (RAIL) in Ghana. Director of the Office of Grants and Research at the Kwame Nkrumah University of Science and Technology (KNUST) and former Dean of the Faculty of Electrical and Computer Engineering, he leads the Quantum Computing and Assistive Technologies Laboratory and has published over 80 articles in AI, IoT, and intelligent systems. He is also Co-Founder of the Responsible AI Network (RAIN) Africa, a KNUST–TUM Germany collaboration. RAIL works to deepen how responsible AI is developed and applied across computer, biomedical, agricultural, and ecological sciences, strengthening researcher capacity in energy, health, food security, and assistive technology for the continent's most vulnerable communities while expanding participation of women in technology through outreach to pre-tertiary schools." },
+  { img: IMG.chris, imgClass: "offset-down-chris", name: "Chris Harrison", role: "Principal Investigator - NSF", bio: "Chris Harrison is a researcher and advocate for inclusive data practices and partner engagement across the ADDN network. His work focuses on ensuring that data-driven solutions are accessible and beneficial to people with disabilities." },
 ];
 
 const CTA_CARDS = [
@@ -65,6 +67,66 @@ const CTA_CARDS = [
   { title: "Media & Communications", desc: "Amplify the importance of disability-inclusive data and help build visibility for ADDN." },
   { title: "AI Innovation", desc: "Access disability-relevant datasets responsibly to build inclusive AI solutions for Africa." },
 ];
+
+// Layout overrides for the Principal Investigators cards: four compact cards in one row.
+// Scoped to #partners and marked !important so they win over haidi-home.css.
+const PRINCIPAL_GRID_CSS = `
+  #partners .principal-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 1rem !important;
+    align-items: start !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  #partners .principal-grid .principal-card {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: none !important;
+    margin: 0 !important;
+  }
+  #partners .principal-grid .principal-card img {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    margin: 0 !important;
+  }
+  #partners .principal-grid .principal-card-body {
+    padding: 0.75rem 0.85rem 0.9rem !important;
+  }
+  #partners .principal-grid .principal-card-body h4 {
+    font-size: 0.95rem !important;
+    line-height: 1.3;
+    margin: 0 0 0.2rem;
+  }
+  #partners .principal-grid .principal-card-body > div > p {
+    font-size: 0.78rem !important;
+    margin: 0 0 0.5rem;
+  }
+  #partners .principal-grid .bio-toggle {
+    font-size: 0.78rem !important;
+    padding: 0.3rem 0.6rem !important;
+  }
+  #partners .principal-grid .bio-text {
+    font-size: 0.78rem !important;
+    line-height: 1.5;
+  }
+  @media (max-width: 768px) {
+    #partners .principal-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+  }
+  @media (max-width: 480px) {
+    #partners .principal-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+`;
 
 export default function HaidiHome() {
   const [bioOpen, setBioOpen] = useState<boolean[]>(PRINCIPALS.map(() => false));
@@ -268,6 +330,7 @@ export default function HaidiHome() {
             <strong>Initial Support:</strong> ADDN is supported by the <strong>Artificial Intelligence for Development (AI4D)</strong> programme, funded by the <strong>International Development Research Centre (IDRC)</strong> and the <strong>United Kingdom&apos;s Foreign, Commonwealth &amp; Development Office (FCDO)</strong>.
           </div>
           <div className="principal-section">
+            <style>{PRINCIPAL_GRID_CSS}</style>
             <div className="section-header">
               <div className="tag">Principal Investigators</div>
               <h3>Meet the principal investigators</h3>
