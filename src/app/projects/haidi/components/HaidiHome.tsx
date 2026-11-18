@@ -261,6 +261,39 @@ export default function HaidiHome() {
         </div>
       </section>
 
+      {/* HAIDI */}
+      <section id="haidi-what" aria-labelledby="haidi-what-title">
+        <div className="container">
+          <div className="tag haidi-what__pill">What is HAIDI?</div>
+          <h2 id="haidi-what-title">Making Africa&apos;s AI future work for everyone</h2>
+          <p className="haidi-what__lead">
+            HAIDI, the Hub for Artificial Intelligence and Disability Inclusion in Africa, is the continent&apos;s first dedicated coordination platform for disability-inclusive AI. It exists to close the disability data gap, help inclusive innovations grow, and make sure disability rights have a place in national and regional AI policy.
+          </p>
+          <p className="haidi-what__lead">
+            Led by the Maseno Centre for Applied AI (MCAAI) with partners across Africa, HAIDI works through three mutually reinforcing pillars.
+          </p>
+
+          <div className="haidi-what__grid">
+            <article className="what-card">
+              <h3>Data</h3>
+              <p>Unlocking quality, Africa-centric disability datasets and governance frameworks, including sign language, speech, mental health and employment data, through the African Disability Data Network.</p>
+            </article>
+            <article className="what-card">
+              <h3>Innovation Scaling</h3>
+              <p>Scaling responsible, inclusive AI solutions by selecting innovations with clear problem-solution fit for persons with disabilities, and supporting them with validation, partnerships, funding access and stronger business models.</p>
+            </article>
+            <article className="what-card">
+              <h3>Evidence, Collaboration &amp; Policy</h3>
+              <p>Generating evidence to influence AI governance, standards and national strategies, positioning HAIDI as Africa&apos;s credible knowledge resource on disability-inclusive AI.</p>
+            </article>
+          </div>
+
+          <p className="haidi-what__note">
+            Inclusive data enables inclusive innovation to scale, and inclusive innovation thrives only within policy and governance frameworks that are disability-responsive.
+          </p>
+        </div>
+      </section>
+
       {/* WHO */}
       <section id="who">
         <div className="container">
