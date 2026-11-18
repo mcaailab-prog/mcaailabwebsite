@@ -12,6 +12,13 @@ export interface IEvent extends Document {
   end_date?: Date;
   location?: string;
   is_online?: boolean;
+  format?: 'In person' | 'Online' | 'Hybrid';
+  time?: string;
+  description?: string;
+  link?: string;
+  recap_link?: string;
+  added_on?: Date;
+  is_new?: boolean;
   status: 'upcoming' | 'ongoing' | 'past'| 'featured';
   is_featured?: boolean;
   createdAt: Date;
@@ -30,6 +37,13 @@ const eventSchema = new Schema<IEvent>({
   end_date: { type: Date },
   location: { type: String, default: '' },
   is_online: { type: Boolean, default: false },
+  format: { type: String, enum: ['In person', 'Online', 'Hybrid'] },
+  time: { type: String, default: '' },
+  description: { type: String, default: '' },
+  link: { type: String, default: '' },
+  recap_link: { type: String, default: '' },
+  added_on: { type: Date },
+  is_new: { type: Boolean },
   status: { type: String, enum: ['upcoming', 'ongoing', 'past', 'featured'], default: 'upcoming' },
   is_featured: { type: Boolean, default: false }
 }, {

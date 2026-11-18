@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 const cards = [
   { href: '/admin/news', title: 'News', body: 'Publish and update news articles shown on the public site.' },
-  { href: '/admin/events', title: 'Events', body: 'Manage upcoming and featured events.' },
+  { href: '/admin/events', title: 'HAIDI Events', body: 'Create upcoming events and publish past recaps on the HAIDI page.' },
   { href: '/admin/team', title: 'Team members', body: 'Add, edit, and remove people shown on the public team pages.' },
   { href: '/admin/projects', title: 'Projects', body: 'Edit the project registry, members, funders, and links.' },
   { href: '/admin/research', title: 'Research areas', body: 'Add lab programmes such as MT, ASR, synthetic data, AI4KSL, and systems.' },

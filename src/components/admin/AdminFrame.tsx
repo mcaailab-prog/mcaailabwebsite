@@ -8,7 +8,7 @@ import { FiExternalLink, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 const NAV = [
   { href: '/admin', label: 'Overview' },
   { href: '/admin/news', label: 'News' },
-  { href: '/admin/events', label: 'Events' },
+  { href: '/admin/events', label: 'HAIDI Events' },
   { href: '/admin/team', label: 'Team' },
   { href: '/admin/projects', label: 'Projects' },
   { href: '/admin/research', label: 'Research areas' },

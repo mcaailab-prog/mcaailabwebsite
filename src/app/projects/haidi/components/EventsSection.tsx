@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   dayOf, formatEventDates, isNewEvent, monthOf, pastEvents, upcomingEvents,
   type HaidiEvent,
@@ -8,6 +8,61 @@ import {
 import { useToday } from "../lib/useToday";
 
 const PAST_INITIAL = 3;
+
+type DatabaseEvent = {
+  id?: string;
+  _id?: string;
+  title: string;
+  slug?: string;
+  start_date: string;
+  end_date?: string;
+  time?: string;
+  location?: string;
+  is_online?: boolean;
+  format?: "In person" | "Online" | "Hybrid";
+  description?: string;
+  summary?: string;
+  body?: string;
+  link?: string;
+  recap_link?: string;
+  featured?: boolean;
+  is_featured?: boolean;
+  status?: "upcoming" | "ongoing" | "past" | "featured";
+  added_on?: string;
+  is_new?: boolean;
+  createdAt?: string;
+};
+
+const toIsoDate = (value?: string) => {
+  if (!value) return undefined;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return undefined;
+  return date.toISOString().slice(0, 10);
+};
+
+const mapDatabaseEvent = (event: DatabaseEvent): HaidiEvent | null => {
+  const date = toIsoDate(event.start_date);
+  if (!event.title || !date) return null;
+
+  const endDate = toIsoDate(event.end_date);
+  const format = event.format ?? (event.is_online ? "Online" : "In person");
+
+  return {
+    id: event.id ?? event._id ?? event.slug ?? `${event.title}-${date}`,
+    title: event.title,
+    date,
+    endDate,
+    time: event.time || undefined,
+    location: event.location || (format === "Online" ? "Online" : ""),
+    format,
+    description: event.description || event.summary || event.body || "",
+    link: event.link || undefined,
+    recapLink: event.recap_link || undefined,
+    featured: event.featured ?? event.is_featured ?? event.status === "featured",
+    addedOn: toIsoDate(event.added_on) ?? toIsoDate(event.createdAt),
+    isNew: event.is_new,
+  };
+};
 
 function EventCard({ event, today }: { event: HaidiEvent; today: string }) {
   const isNew = isNewEvent(event, today);
@@ -42,9 +97,44 @@ function EventCard({ event, today }: { event: HaidiEvent; today: string }) {
 export default function EventsSection() {
   const today = useToday();
   const [showAllPast, setShowAllPast] = useState(false);
+  const [events, setEvents] = useState<HaidiEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
-  const upcoming = today ? upcomingEvents(today) : [];
-  const past = today ? pastEvents(today) : [];
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadEvents = async () => {
+      try {
+        const response = await fetch("/api/events?when=all&category=haidi", { cache: "no-store" });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to load events");
+        }
+        if (!cancelled) {
+          setEvents(
+            Array.isArray(data)
+              ? data.map(mapDatabaseEvent).filter((event): event is HaidiEvent => event !== null)
+              : []
+          );
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setLoadError(error instanceof Error ? error.message : "Failed to load events");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    loadEvents();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const upcoming = today ? upcomingEvents(today, events) : [];
+  const past = today ? pastEvents(today, events) : [];
   const featured = past.find((e) => e.featured) ?? past[0];
   const others = past.filter((e) => e !== featured);
   const visibleOthers = showAllPast ? others : others.slice(0, PAST_INITIAL);
@@ -59,8 +149,13 @@ export default function EventsSection() {
           policymakers working on disability-inclusive AI in Africa.
         </p>
 
-        {!today ? (
+        {!today || loading ? (
           <div className="events-placeholder" aria-hidden="true" />
+        ) : loadError ? (
+          <div className="events-empty">
+            <strong>Events could not be loaded.</strong>
+            <p>{loadError}</p>
+          </div>
         ) : (
           <>
             {/* UPCOMING */}
