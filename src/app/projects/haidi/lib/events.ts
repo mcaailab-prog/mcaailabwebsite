@@ -1,7 +1,7 @@
 /**
  * HAIDI events.
  *
- * HOW TO ADD AN EVENT: add an object to EVENTS below. That's it.
+ * Events are loaded from MongoDB through `/api/events`.
  *  - Upcoming vs past is worked out automatically from `date` / `endDate`
  *    (an event moves to "Past events" the day after it ends).
  *  - The "New" label shows automatically for an upcoming event for NEW_LABEL_DAYS
@@ -10,7 +10,6 @@
  *    and add `recapLink` to show a "View recap" link.
  *
  * Dates are plain "YYYY-MM-DD" strings.
- * The entries below are SAMPLES: replace them with real events before deploying.
  */
 
 export type EventFormat = "In person" | "Online" | "Hybrid";
@@ -42,78 +41,7 @@ export interface HaidiEvent {
 /** How many days after `addedOn` an upcoming event keeps its "New" label. */
 export const NEW_LABEL_DAYS = 30;
 
-export const EVENTS: HaidiEvent[] = [
-  // ---- Upcoming (samples) ----
-  {
-    id: "webinar-disability-data-ai",
-    title: "[Sample] Community Webinar: Disability Data and AI in Africa",
-    date: "2026-11-12",
-    time: "14:00 EAT",
-    location: "Online",
-    format: "Online",
-    description: "An open conversation with researchers, OPDs and innovators on what it takes to make disability data discoverable and responsibly usable.",
-    link: "https://forms.gle/73bKa4jU8VfdeHRx9",
-    addedOn: "2026-10-10",
-  },
-  {
-    id: "annual-convening",
-    title: "[Sample] HAIDI Annual Convening",
-    date: "2026-12-03",
-    endDate: "2026-12-04",
-    location: "Venue to be confirmed",
-    format: "Hybrid",
-    description: "Two days bringing the HAIDI and ADDN community together to share progress, datasets and partnerships.",
-    addedOn: "2026-08-20",
-  },
-  {
-    id: "workshop-ethical-governance",
-    title: "[Sample] Workshop: Ethical Disability Data Governance",
-    date: "2027-01-21",
-    time: "10:00 EAT",
-    location: "Online",
-    format: "Online",
-    description: "A practical workshop on consent, privacy and participation of persons with disabilities in data collection and AI development.",
-    addedOn: "2026-10-12",
-  },
-
-  // ---- Past (samples) ----
-  {
-    id: "addn-launch",
-    title: "[Sample] ADDN Launch: Enhancing Inclusiveness with AI",
-    date: "2026-06-18",
-    location: "Venue to be confirmed",
-    format: "Hybrid",
-    description: "The launch of the African Disability Data Network, introducing the platform, founding partners and the Data Explorer to the wider community.",
-    recapLink: "https://example.com/addn-launch-recap",
-    featured: true,
-  },
-  {
-    id: "sign-language-roundtable",
-    title: "[Sample] Sign Language Datasets Roundtable",
-    date: "2026-04-09",
-    location: "Online",
-    format: "Online",
-    description: "Dataset builders and Deaf community organisations compared approaches to African sign language data.",
-    recapLink: "https://example.com/sign-language-recap",
-  },
-  {
-    id: "policy-dialogue",
-    title: "[Sample] Inclusive AI Policy Dialogue",
-    date: "2025-11-20",
-    location: "Venue to be confirmed",
-    format: "In person",
-    description: "Policymakers and OPDs discussed how to embed disability inclusion in national AI strategies.",
-  },
-  {
-    id: "speech-data-workshop",
-    title: "[Sample] Non-Standard Speech Data Workshop",
-    date: "2025-09-05",
-    location: "Online",
-    format: "Online",
-    description: "A working session on collecting and governing speech datasets that reflect diverse vocal expression.",
-    recapLink: "https://example.com/speech-workshop-recap",
-  },
-];
+export const EVENTS: HaidiEvent[] = [];
 
 // ---------- helpers ----------
 
@@ -134,12 +62,12 @@ export const isNewEvent = (e: HaidiEvent, today: string) => {
 };
 
 /** Soonest first. */
-export const upcomingEvents = (today: string) =>
-  EVENTS.filter((e) => isUpcoming(e, today)).sort((a, b) => a.date.localeCompare(b.date));
+export const upcomingEvents = (today: string, events: HaidiEvent[] = EVENTS) =>
+  events.filter((e) => isUpcoming(e, today)).sort((a, b) => a.date.localeCompare(b.date));
 
 /** Most recent first. */
-export const pastEvents = (today: string) =>
-  EVENTS.filter((e) => !isUpcoming(e, today)).sort((a, b) => b.date.localeCompare(a.date));
+export const pastEvents = (today: string, events: HaidiEvent[] = EVENTS) =>
+  events.filter((e) => !isUpcoming(e, today)).sort((a, b) => b.date.localeCompare(a.date));
 
 const fmt = (opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("en-GB", { ...opts, timeZone: "UTC" });
 const FULL = fmt({ day: "numeric", month: "short", year: "numeric" });

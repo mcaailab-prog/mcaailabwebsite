@@ -14,7 +14,9 @@ export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url, `http://${request.headers.get('host')}`);
     const when = url.searchParams.get('when'); // upcoming|past|featured|all
+    const category = url.searchParams.get('category');
     const filter: Record<string, unknown> = {};
+    if (category) filter.category = category;
     const now = new Date();
     if (when === 'upcoming') {
       filter.start_date = { $gte: now };
@@ -44,7 +46,16 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    if (!body.category) body.category = 'event';
+    if (!body.title || typeof body.title !== 'string') {
+      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
+    }
+    if (!body.slug || typeof body.slug !== 'string') {
+      return NextResponse.json({ error: 'Slug is required' }, { status: 400 });
+    }
+    if (!body.start_date) {
+      return NextResponse.json({ error: 'Start date is required' }, { status: 400 });
+    }
+    if (!body.category) body.category = 'haidi';
     const ev = new Event(body);
     await ev.save();
 
