@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FiArrowLeft, FiArrowRight, FiCalendar, FiCheckCircle, FiLayers, FiShield, FiUsers } from 'react-icons/fi';
 import { api } from '@/lib/api';
+import SmartVoiceLanding from './SmartVoiceLanding';
+import TafsiriLanding from './TafsiriLanding';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -20,6 +22,8 @@ export default async function InnovationDetailPage({ params }: { params: Promise
   const { slug } = await params;
   const product = await api.getInnovationBySlug(slug);
   if (!product) notFound();
+  if (slug === 'smartvoice-system') return <SmartVoiceLanding product={product} />;
+  if (slug === 'tafsiri') return <TafsiriLanding product={product} />;
 
   return (
     <div className="bg-white text-slate-800">

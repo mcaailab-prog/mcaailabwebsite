@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 const HERO_IMAGES = [
   '/hero1.jpg', 
-  '/2hero.jpg', 
+  '/hero2.jpg', 
   '/hero3.jpg',
   '/4hero.jpg',
   '/5hero.jpg',
